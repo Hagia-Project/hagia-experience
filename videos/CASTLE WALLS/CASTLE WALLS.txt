@@ -1,0 +1,17 @@
+AI Tv Series
+
+
+
+CLIENT   Ay Yapım
+
+LOCATION   -
+
+PARTNER   -
+
+YEAR   2025
+
+
+
+Castle Walls was developed over the course of a year and stands among the industry’s first AI-generated series, combining Ay Yapim’s signature storytelling with cutting-edge AI innovation. It was produced end-to-end using a dynamic mix of AI technologies including ChatGPT for prompt enhancement and creative refinement; MidJourney for visual exploration and inspiration; Runway and Google Nano Banana for character integration; Veo, Kling, ComfyUI and Topaz for video generation and cinematic execution; and Runway and ElevenLabs for voice and dubbing – merging creativity with execution. Alongside these leading AI platforms, AI YAPIM deployed its own custom-built AI storyboarding tool AI Yapim Storyboard to storyboard and pipeline, and trained a proprietary video diffusion model, AYDNA 1.0, which was fine-tuned on Ay Yapim’s licensed catalog. AYDNA 1.0 directly powers video generation and consistently delivers a distinctive Ay Yapim style across scenes.  
+
+Castle Walls will premiere later this year on Turkish Free TV and a global streamer.
