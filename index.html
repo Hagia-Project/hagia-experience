@@ -517,14 +517,6 @@
                 description: 'Visual presentation of AYDNA research paper findings.'
             },
             {
-                id: 'starhub',
-                title: 'STARHUB',
-                folder: 'videos/STARHUB',
-                videos: ['video1.mp4', 'video2.mp4'],
-                descFile: null,
-                description: 'Digital experience design for StarHub telecommunications.'
-            },
-            {
                 id: 'vision-sakip-sabanci',
                 title: 'VISION of SAKIP SABANCI',
                 folder: 'videos/VISION of SAKIP SABANCI',
@@ -533,12 +525,12 @@
                 description: 'Tribute experience honoring the vision of Sakıp Sabancı.'
             },
             {
-                id: 'youtube',
-                title: 'YOUTUBE',
-                folder: 'videos/YOUTUBE',
+                id: 'ford',
+                title: 'FORD',
+                folder: 'videos/FORD',
                 videos: ['video1.mp4'],
                 descFile: null,
-                description: 'Creative content and visual design for YouTube platform.'
+                description: 'AI-generated scene creation for Ford commercial film production.'
             }
         ];
         
@@ -3193,40 +3185,39 @@
             // Clear existing panels
             overlay.innerHTML = '';
             
-            // Panel layout configuration - 2 columns
-            const leftCount = 6;
+            // Panel layout configuration - alternating zigzag
             const panelWidth = 420;
             const panelHeight = 260;
-            const verticalGap = 300;
+            const verticalGap = 150; // Vertical gap between rows
             const horizontalGap = 300;
-            
+
             // Calculate positions - centered on screen
             const centerX = window.innerWidth / 2;
-            
+
             // Left column X position
             const leftX = centerX - panelWidth - horizontalGap / 2;
-            // Right column X position  
+            // Right column X position
             const rightX = centerX + horizontalGap / 2;
-            
+
             // Store panel data for scrolling
             window.workPanelsData = [];
-            
+
             WORKS_DATA.forEach((work, index) => {
                 const panel = document.createElement('div');
-                panel.className = 'work-panel ' + (index < leftCount ? 'left' : 'right');
+                // Alternate left/right based on even/odd index
+                const isLeft = index % 2 === 0;
+                panel.className = 'work-panel ' + (isLeft ? 'left' : 'right');
                 panel.dataset.workIndex = index;
-                
-                // Calculate base Y position (will be adjusted by scroll)
+
+                // Calculate base Y position - each item goes down progressively
                 let x, baseY;
-                if (index < leftCount) {
-                    // Left column
+                if (isLeft) {
                     x = leftX;
-                    baseY = index * (panelHeight + verticalGap);
                 } else {
-                    // Right column
                     x = rightX;
-                    baseY = (index - leftCount) * (panelHeight + verticalGap);
                 }
+                // Each panel is offset vertically by half the height + gap
+                baseY = index * (panelHeight / 2 + verticalGap);
                 
                 panel.style.left = x + 'px';
                 
