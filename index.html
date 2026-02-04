@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAGIA — Creative Studio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         html {
             overflow-y: scroll;
         }
-        
+
         body {
             width: 100%;
             min-height: 900vh;
@@ -21,16 +26,20 @@
             background: #000;
             font-family: 'Space Grotesk', sans-serif;
         }
-        
+
         #canvas-container {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
         }
-        
-        canvas { display: block; }
-        
+
+        canvas {
+            display: block;
+        }
+
         .logo {
             position: fixed;
             top: 40px;
@@ -41,12 +50,12 @@
             animation: fadeIn 2s ease forwards;
             animation-delay: 1s;
         }
-        
+
         .logo img {
             height: 144px;
             width: auto;
         }
-        
+
         #totem-container {
             position: fixed;
             right: 40px;
@@ -59,11 +68,11 @@
             opacity: 0;
             transition: opacity 0.8s ease;
         }
-        
+
         #totem-container.visible {
             opacity: 1;
         }
-        
+
         /* Works Panels Overlay */
         #works-panels-overlay {
             position: fixed;
@@ -77,11 +86,11 @@
             transition: opacity 0.5s ease;
             overflow: hidden;
         }
-        
+
         #works-panels-overlay.visible {
             opacity: 1;
         }
-        
+
         .work-panel {
             position: absolute;
             width: 420px;
@@ -95,51 +104,51 @@
             transform-style: preserve-3d;
             backface-visibility: hidden;
         }
-        
+
         .work-panel.left {
             transform: perspective(800px) rotateY(25deg);
             transform-origin: right center;
         }
-        
+
         .work-panel.right {
             transform: perspective(800px) rotateY(-25deg);
             transform-origin: left center;
         }
-        
+
         .work-panel:hover {
             border-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
             z-index: 10;
         }
-        
+
         .work-panel.left:hover {
             transform: perspective(800px) rotateY(0deg) scale(1.05);
         }
-        
+
         .work-panel.right:hover {
             transform: perspective(800px) rotateY(0deg) scale(1.05);
         }
-        
+
         .work-panel video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .work-panel-title {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             padding: 10px 12px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
             color: white;
             font-size: 9px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             opacity: 0.9;
         }
-        
+
         .work-panel-corners {
             position: absolute;
             top: 0;
@@ -148,7 +157,7 @@
             bottom: 0;
             pointer-events: none;
         }
-        
+
         .work-panel-corner {
             position: absolute;
             width: 12px;
@@ -158,30 +167,53 @@
             border-width: 0;
             transition: border-color 0.3s ease;
         }
-        
-        .work-panel-corner.tl { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; }
-        .work-panel-corner.tr { top: -1px; right: -1px; border-top-width: 1px; border-right-width: 1px; }
-        .work-panel-corner.bl { bottom: -1px; left: -1px; border-bottom-width: 1px; border-left-width: 1px; }
-        .work-panel-corner.br { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; }
-        
+
+        .work-panel-corner.tl {
+            top: -1px;
+            left: -1px;
+            border-top-width: 1px;
+            border-left-width: 1px;
+        }
+
+        .work-panel-corner.tr {
+            top: -1px;
+            right: -1px;
+            border-top-width: 1px;
+            border-right-width: 1px;
+        }
+
+        .work-panel-corner.bl {
+            bottom: -1px;
+            left: -1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+        }
+
+        .work-panel-corner.br {
+            bottom: -1px;
+            right: -1px;
+            border-bottom-width: 1px;
+            border-right-width: 1px;
+        }
+
         .work-panel:hover .work-panel-corner {
             border-color: rgba(255, 255, 255, 0.9);
         }
-        
+
         .work-panel-line {
             position: absolute;
             background: rgba(255, 255, 255, 0.15);
             pointer-events: none;
         }
-        
+
         .work-panel-line.vertical {
             width: 1px;
         }
-        
+
         .work-panel-line.horizontal {
             height: 1px;
         }
-        
+
         .scroll-hint {
             position: fixed;
             bottom: 40px;
@@ -197,36 +229,54 @@
             animation-delay: 2s;
             transition: opacity 0.5s ease;
         }
-        
+
         .scroll-hint::after {
             content: '';
             display: block;
             width: 1px;
             height: 25px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
             margin: 12px auto 0;
             animation: scrollPulse 2s ease infinite;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
-        
+
         @keyframes scrollPulse {
-            0%, 100% { transform: translateY(0); opacity: 0.3; }
-            50% { transform: translateY(5px); opacity: 0.6; }
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(5px);
+                opacity: 0.6;
+            }
         }
-        
+
         .vignette {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 50;
-            background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0,0,0,0.4) 100%);
+            background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
         }
-        
+
         .work-info-box {
             position: fixed;
             padding: 20px 25px;
@@ -240,11 +290,11 @@
             max-width: 280px;
             backdrop-filter: blur(10px);
         }
-        
+
         .work-info-box.visible {
             opacity: 1;
         }
-        
+
         .work-info-title {
             color: #fff;
             font-size: 16px;
@@ -252,14 +302,14 @@
             margin-bottom: 8px;
             letter-spacing: 1px;
         }
-        
+
         .work-info-desc {
             color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             line-height: 1.5;
             letter-spacing: 0.5px;
         }
-        
+
         /* Work Detail Page Styles */
         #work-detail-page {
             position: fixed;
@@ -274,31 +324,31 @@
             opacity: 0;
             transition: opacity 0.5s ease;
         }
-        
+
         #work-detail-page.visible {
             opacity: 1;
         }
-        
+
         .work-detail-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 60px 40px;
         }
-        
+
         .work-detail-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
         }
-        
+
         .work-detail-title {
             font-size: 48px;
             font-weight: 300;
             letter-spacing: 4px;
             color: white;
         }
-        
+
         .work-detail-close {
             width: 50px;
             height: 50px;
@@ -307,11 +357,11 @@
             opacity: 0.7;
             transition: opacity 0.3s ease;
         }
-        
+
         .work-detail-close:hover {
             opacity: 1;
         }
-        
+
         .work-detail-close::before,
         .work-detail-close::after {
             content: '';
@@ -322,15 +372,15 @@
             height: 2px;
             background: white;
         }
-        
+
         .work-detail-close::before {
             transform: translate(-50%, -50%) rotate(45deg);
         }
-        
+
         .work-detail-close::after {
             transform: translate(-50%, -50%) rotate(-45deg);
         }
-        
+
         .work-detail-description {
             font-size: 16px;
             line-height: 1.8;
@@ -338,14 +388,14 @@
             margin-bottom: 50px;
             max-width: 800px;
         }
-        
+
         .work-detail-videos {
             display: flex;
             flex-direction: column;
             gap: 40px;
             margin-bottom: 60px;
         }
-        
+
         .work-video-container {
             position: relative;
             background: #111;
@@ -353,7 +403,7 @@
             width: 100%;
             max-width: 900px;
         }
-        
+
         .work-video-container video {
             width: 100%;
             height: auto;
@@ -362,11 +412,11 @@
             object-fit: contain;
             background: #000;
         }
-        
+
         .work-detail-info {
             margin-bottom: 40px;
         }
-        
+
         .work-detail-meta {
             display: flex;
             flex-wrap: wrap;
@@ -375,11 +425,11 @@
             padding-bottom: 30px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .work-detail-meta-item {
             min-width: 120px;
         }
-        
+
         .work-detail-meta-label {
             font-size: 10px;
             letter-spacing: 2px;
@@ -387,46 +437,135 @@
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-        
+
         .work-detail-meta-value {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.9);
             letter-spacing: 0.5px;
         }
-        
+
         .work-detail-overview {
             font-size: 16px;
             line-height: 2;
             color: rgba(255, 255, 255, 0.75);
             max-width: 900px;
         }
-        
+
         .work-detail-overview p {
             margin-bottom: 20px;
         }
+
+        /* Hand tracking camera feed */
+        #hand-tracking-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2000;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        #hand-tracking-container:hover {
+            opacity: 1;
+        }
+
+        #hand-tracking-container video,
+        #hand-tracking-container canvas {
+            display: block;
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        #hand-tracking-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #hand-tracking-status {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        #hand-tracking-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1999;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #hand-tracking-toggle .hand-icon {
+            opacity: 0.9;
+        }
+
+        #hand-tracking-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        #hand-tracking-toggle.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
     </style>
+
+    <!-- MediaPipe Hand Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div id="canvas-container"></div>
     <div class="vignette"></div>
-    
+
+    <!-- Hand Tracking UI -->
+    <button id="hand-tracking-toggle" onclick="toggleHandTracking()">HAND CONTROL</button>
+    <div id="hand-tracking-container" style="display: none;">
+        <video id="hand-tracking-video" playsinline></video>
+        <canvas id="hand-tracking-canvas"></canvas>
+        <div id="hand-tracking-status">Initializing...</div>
+    </div>
+
     <!-- Totem logo overlay on right side -->
     <div id="totem-container"></div>
-    
+
     <!-- Works Panels Overlay -->
     <div id="works-panels-overlay"></div>
-    
+
     <div class="logo">
         <img src="hagia_logo.png" alt="HAGIA">
     </div>
-    
+
     <div class="scroll-hint">Scroll to descend</div>
-    
+
     <div id="work-info-box" class="work-info-box">
         <div class="work-info-title">Project Title</div>
         <div class="work-info-desc">Project description goes here</div>
     </div>
-    
+
     <!-- Work Detail Page -->
     <div id="work-detail-page">
         <div class="work-detail-container">
@@ -438,9 +577,10 @@
             <div class="work-detail-info" id="detail-info"></div>
         </div>
     </div>
-    
+
     <!-- Work plane click overlays -->
-    <div id="work-overlays" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60;">
+    <div id="work-overlays"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -448,8 +588,798 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
-    
+
     <script>
+        // ============ HAND TRACKING SYSTEM ============
+        let handTrackingActive = false;
+        let hands = null;
+        let previousPinchDistance = null;
+        let pinchScrollSpeed = 15; // Scroll speed multiplier
+        let videoStream = null;
+        let handTrackingLoop = null;
+
+        // Pointer finger mouse control
+        let pointerMode = false;
+        let lastPointerX = null;
+        let lastPointerY = null;
+        let smoothPointerX = 0;
+        let smoothPointerY = 0;
+        let pointerCursor = null;
+        let hoveredElement = null;
+        let pointerClickCooldown = false;
+
+        // Z-axis push detection for click
+        let previousIndexZ = null;
+        let zPushHistory = [];
+        let pushClickCooldown = false;
+
+        // Create virtual cursor element
+        function createPointerCursor() {
+            if (pointerCursor) return;
+            pointerCursor = document.createElement('div');
+            pointerCursor.id = 'hand-pointer-cursor';
+            pointerCursor.style.cssText = `
+                position: fixed;
+                width: 24px;
+                height: 24px;
+                border: 2px solid white;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 10000;
+                display: none;
+                transform: translate(-50%, -50%);
+                transition: transform 0.05s ease-out;
+                box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            `;
+            // Inner dot
+            const innerDot = document.createElement('div');
+            innerDot.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 6px;
+                height: 6px;
+                background: white;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+            `;
+            pointerCursor.appendChild(innerDot);
+            document.body.appendChild(pointerCursor);
+        }
+
+        function showPointerCursor(x, y) {
+            if (!pointerCursor) createPointerCursor();
+            pointerCursor.style.display = 'block';
+            pointerCursor.style.left = x + 'px';
+            pointerCursor.style.top = y + 'px';
+        }
+
+        function hidePointerCursor() {
+            if (pointerCursor) {
+                pointerCursor.style.display = 'none';
+            }
+            // Reset any hovered element
+            if (hoveredElement) {
+                hoveredElement.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+                hoveredElement = null;
+            }
+        }
+
+        function isFingerExtended(landmarks, fingerTip, fingerPip) {
+            // Check if finger is extended by comparing tip Y to pip Y (lower Y = higher on screen = extended)
+            // Also check distance from wrist
+            const tip = landmarks[fingerTip];
+            const pip = landmarks[fingerPip];
+            const wrist = landmarks[0];
+
+            // For vertical check (tip should be above pip when extended)
+            const tipHigher = tip.y < pip.y;
+
+            // Distance from wrist to tip vs wrist to pip
+            const tipDist = Math.sqrt(Math.pow(tip.x - wrist.x, 2) + Math.pow(tip.y - wrist.y, 2));
+            const pipDist = Math.sqrt(Math.pow(pip.x - wrist.x, 2) + Math.pow(pip.y - wrist.y, 2));
+
+            return tipHigher && tipDist > pipDist * 1.1;
+        }
+
+        function isOnlyIndexExtended(landmarks) {
+            // Finger landmarks: 
+            // Index: tip=8, pip=6
+            // Middle: tip=12, pip=10
+            // Ring: tip=16, pip=14
+            // Pinky: tip=20, pip=18
+            // Thumb: tip=4, ip=3
+
+            const indexExtended = isFingerExtended(landmarks, 8, 6);
+            const middleExtended = isFingerExtended(landmarks, 12, 10);
+            const ringExtended = isFingerExtended(landmarks, 16, 14);
+            const pinkyExtended = isFingerExtended(landmarks, 20, 18);
+
+            // Thumb check is different - compare x distance
+            const thumbTip = landmarks[4];
+            const thumbIp = landmarks[3];
+            const thumbExtended = Math.abs(thumbTip.x - landmarks[0].x) > Math.abs(thumbIp.x - landmarks[0].x) * 1.2;
+
+            return indexExtended && !middleExtended && !ringExtended && !pinkyExtended && !thumbExtended;
+        }
+
+        function isIndexAndMiddleExtended(landmarks) {
+            const indexExtended = isFingerExtended(landmarks, 8, 6);
+            const middleExtended = isFingerExtended(landmarks, 12, 10);
+            const ringExtended = isFingerExtended(landmarks, 16, 14);
+            const pinkyExtended = isFingerExtended(landmarks, 20, 18);
+
+            // Thumb check
+            const thumbTip = landmarks[4];
+            const thumbIp = landmarks[3];
+            const thumbExtended = Math.abs(thumbTip.x - landmarks[0].x) > Math.abs(thumbIp.x - landmarks[0].x) * 1.2;
+
+            return indexExtended && middleExtended && !ringExtended && !pinkyExtended && !thumbExtended;
+        }
+
+        function areFingersGlued(landmarks) {
+            // Check if index (8) and middle (12) fingertips are close together
+            const indexTip = landmarks[8];
+            const middleTip = landmarks[12];
+
+            const dx = indexTip.x - middleTip.x;
+            const dy = indexTip.y - middleTip.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Debug - log distance to help calibrate
+            // console.log('Finger distance:', distance.toFixed(3));
+
+            // Threshold for "glued" - fingers are close (increased from 0.05)
+            return distance < 0.08;
+        }
+
+        function handlePointerMove(x, y) {
+            // Smooth the pointer movement
+            smoothPointerX += (x - smoothPointerX) * 0.3;
+            smoothPointerY += (y - smoothPointerY) * 0.3;
+
+            showPointerCursor(smoothPointerX, smoothPointerY);
+
+            // Find element under cursor
+            const elementUnder = document.elementFromPoint(smoothPointerX, smoothPointerY);
+
+            if (elementUnder !== hoveredElement) {
+                // Mouse leave old element
+                if (hoveredElement) {
+                    hoveredElement.dispatchEvent(new MouseEvent('mouseleave', {
+                        bubbles: true,
+                        clientX: smoothPointerX,
+                        clientY: smoothPointerY
+                    }));
+                    hoveredElement.dispatchEvent(new MouseEvent('mouseout', {
+                        bubbles: true,
+                        clientX: smoothPointerX,
+                        clientY: smoothPointerY
+                    }));
+                }
+
+                // Mouse enter new element
+                if (elementUnder) {
+                    elementUnder.dispatchEvent(new MouseEvent('mouseenter', {
+                        bubbles: true,
+                        clientX: smoothPointerX,
+                        clientY: smoothPointerY
+                    }));
+                    elementUnder.dispatchEvent(new MouseEvent('mouseover', {
+                        bubbles: true,
+                        clientX: smoothPointerX,
+                        clientY: smoothPointerY
+                    }));
+                }
+
+                hoveredElement = elementUnder;
+            }
+
+            // Always dispatch mousemove
+            if (elementUnder) {
+                elementUnder.dispatchEvent(new MouseEvent('mousemove', {
+                    bubbles: true,
+                    clientX: smoothPointerX,
+                    clientY: smoothPointerY
+                }));
+            }
+        }
+
+        function handlePointerClick() {
+            if (pointerClickCooldown) return;
+
+            // Hide cursor temporarily to get element underneath
+            if (pointerCursor) pointerCursor.style.display = 'none';
+            const elementUnder = document.elementFromPoint(smoothPointerX, smoothPointerY);
+            if (pointerCursor) pointerCursor.style.display = 'block';
+
+            console.log('Click attempt at', smoothPointerX, smoothPointerY, 'element:', elementUnder);
+
+            if (elementUnder) {
+                // Visual feedback
+                if (pointerCursor) {
+                    pointerCursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                    pointerCursor.style.background = 'rgba(100, 255, 150, 0.3)';
+                    setTimeout(() => {
+                        if (pointerCursor) {
+                            pointerCursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                            pointerCursor.style.background = 'transparent';
+                        }
+                    }, 200);
+                }
+
+                // Find clickable element (search up the DOM tree)
+                let clickTarget = elementUnder;
+                let clicked = false;
+                let attempts = 0;
+
+                while (clickTarget && attempts < 10 && !clicked) {
+                    // Check for work-detail-close button
+                    if (clickTarget.classList && clickTarget.classList.contains('work-detail-close')) {
+                        console.log('Closing work detail via hand gesture');
+                        closeWorkDetail();
+                        clicked = true;
+                        break;
+                    }
+
+                    // Check for work-panel
+                    if (clickTarget.classList && clickTarget.classList.contains('work-panel')) {
+                        const workIndex = parseInt(clickTarget.dataset.workIndex);
+                        if (!isNaN(workIndex)) {
+                            console.log('Opening work', workIndex, 'via hand gesture');
+                            openWorkDetail(workIndex);
+                            clicked = true;
+                            break;
+                        }
+                    }
+
+                    // Check for onclick attribute
+                    if (clickTarget.onclick) {
+                        clickTarget.onclick();
+                        console.log('onclick() called on', clickTarget);
+                        clicked = true;
+                        break;
+                    }
+
+                    clickTarget = clickTarget.parentElement;
+                    attempts++;
+                }
+
+                // Fallback: try direct click
+                if (!clicked) {
+                    if (typeof elementUnder.click === 'function') {
+                        elementUnder.click();
+                        console.log('Fallback direct click() called');
+                    }
+                }
+
+                // Cooldown to prevent multiple clicks
+                pointerClickCooldown = true;
+                setTimeout(() => { pointerClickCooldown = false; }, 800);
+            }
+        }
+
+        function toggleHandTracking() {
+            const btn = document.getElementById('hand-tracking-toggle');
+            const container = document.getElementById('hand-tracking-container');
+
+            if (!handTrackingActive) {
+                // Start hand tracking
+                btn.classList.add('active');
+                btn.textContent = 'STARTING...';
+                container.style.display = 'block';
+                handTrackingActive = true;
+                initHandTracking();
+            } else {
+                // Stop hand tracking
+                btn.classList.remove('active');
+                btn.textContent = 'HAND CONTROL';
+                container.style.display = 'none';
+                handTrackingActive = false;
+                stopHandTracking();
+            }
+        }
+
+        async function initHandTracking() {
+            const videoElement = document.getElementById('hand-tracking-video');
+            const canvasElement = document.getElementById('hand-tracking-canvas');
+            const statusElement = document.getElementById('hand-tracking-status');
+            const btn = document.getElementById('hand-tracking-toggle');
+            const canvasCtx = canvasElement.getContext('2d');
+
+            // Set canvas size
+            canvasElement.width = 200;
+            canvasElement.height = 150;
+
+            statusElement.textContent = 'Finding cameras...';
+
+            try {
+                if (typeof Hands === 'undefined') {
+                    throw new Error('MediaPipe Hands library not loaded. Check internet connection.');
+                }
+
+                // First enumerate devices to find video inputs
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(d => d.kind === 'videoinput');
+
+                console.log('Available video devices:', videoDevices);
+
+                if (videoDevices.length === 0) {
+                    throw new Error('No video devices found');
+                }
+
+                statusElement.textContent = 'Starting camera...';
+
+                // Try each video device until one works
+                let streamStarted = false;
+                let lastError = null;
+
+                // Strategy: Try each camera with specific constraints, then relax them
+                for (let i = 0; i < videoDevices.length && !streamStarted; i++) {
+                    const device = videoDevices[i];
+                    // Strategy 1: Request specific device with ideal resolution
+                    // Strategy 2: Request specific device with ANY resolution (fix for OverconstrainedError)
+                    const strategies = [
+                        {
+                            name: 'Ideal Resolution',
+                            constraints: {
+                                video: {
+                                    deviceId: { exact: device.deviceId },
+                                    width: { ideal: 640 },
+                                    height: { ideal: 480 }
+                                },
+                                audio: false
+                            }
+                        },
+                        {
+                            name: 'Any Resolution',
+                            constraints: {
+                                video: {
+                                    deviceId: { exact: device.deviceId }
+                                },
+                                audio: false
+                            }
+                        }
+                    ];
+
+                    for (const strategy of strategies) {
+                        if (streamStarted) break;
+
+                        try {
+                            console.log(`Trying camera ${i} (${strategy.name}): ${device.label || 'Unknown'}`);
+                            statusElement.textContent = `Camera ${i + 1}/${videoDevices.length} (${strategy.name})...`;
+
+                            videoStream = await navigator.mediaDevices.getUserMedia(strategy.constraints);
+
+                            // Setup video element
+                            videoElement.srcObject = videoStream;
+                            videoElement.muted = true;
+                            videoElement.playsInline = true;
+                            videoElement.setAttribute('playsinline', '');
+
+                            // Wait for video to be ready
+                            await new Promise((resolve, reject) => {
+                                const timeout = setTimeout(() => {
+                                    reject(new Error('Video load timeout'));
+                                }, 5000); // 5 second timeout for faster fallback
+
+                                videoElement.onloadedmetadata = () => {
+                                    clearTimeout(timeout);
+                                    videoElement.play().then(resolve).catch(reject);
+                                };
+
+                                videoElement.onerror = (e) => {
+                                    clearTimeout(timeout);
+                                    reject(e);
+                                };
+                            });
+
+                            console.log(`Camera ${i} started successfully with ${strategy.name} strategy!`);
+                            streamStarted = true;
+
+                        } catch (err) {
+                            console.warn(`Camera ${i} ${strategy.name} failed:`, err.message);
+                            lastError = err;
+                            // Clean up failed stream if any partial init happened
+                            if (videoStream) {
+                                try {
+                                    videoStream.getTracks().forEach(track => track.stop());
+                                } catch (e) { }
+                                videoStream = null;
+                            }
+                        }
+                    }
+                }
+
+                // Fallback Strategy: Any camera (System Default)
+                if (!streamStarted) {
+                    console.log('Specific cameras failed. Trying system default...');
+                    statusElement.textContent = 'Trying default camera...';
+                    try {
+                        videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                        videoElement.srcObject = videoStream;
+                        videoElement.muted = true;
+                        videoElement.playsInline = true;
+                        videoElement.setAttribute('playsinline', '');
+                        await videoElement.play();
+                        streamStarted = true;
+                        console.log('System default camera started!');
+                    } catch (err) {
+                        console.error('System default camera failed:', err);
+                        lastError = err;
+                    }
+                }
+
+                if (!streamStarted) {
+                    throw lastError || new Error('Could not start any camera');
+                }
+
+                statusElement.textContent = 'Loading hand model...';
+
+                // Initialize MediaPipe Hands
+                hands = new Hands({
+                    locateFile: (file) => {
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                    }
+                });
+
+                hands.setOptions({
+                    maxNumHands: 1,
+                    modelComplexity: 0,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+
+                hands.onResults(function (results) {
+                    onHandResults(results, canvasCtx, canvasElement, statusElement);
+                });
+
+                // Wait for model to initialize
+                await hands.initialize();
+
+                btn.textContent = 'HAND CONTROL ON';
+                statusElement.textContent = 'Hand tracking ready';
+
+                // Start processing frames
+                processFrame(videoElement);
+
+            } catch (err) {
+                console.error('Hand tracking error:', err);
+                statusElement.textContent = 'Error: ' + err.message;
+                btn.textContent = 'HAND CONTROL';
+                btn.classList.remove('active');
+                handTrackingActive = false;
+
+                // Enhanced error reporting
+                let errorMsg = 'Failed to start hand tracking: ' + err.message;
+                if (err.name) errorMsg += `\nError Name: ${err.name}`;
+
+                if (err.name === 'OverconstrainedError') {
+                    errorMsg += '\n\nCamera constraints could not be met. \nTrying to access camera with too specific requirements (e.g. resolution) failed.';
+                } else if (err.name === 'NotAllowedError') {
+                    errorMsg = 'Camera permission denied. Please allow camera access in your browser settings and try again.';
+                } else if (err.name === 'NotFoundError') {
+                    errorMsg = 'No camera found. Please connect a camera and try again.';
+                }
+
+                alert(errorMsg + '\n\nPlease report this error if it persists.');
+
+                stopHandTracking();
+            }
+        }
+
+        function processFrame(videoElement) {
+            if (!handTrackingActive || !hands) return;
+
+            if (videoElement.readyState >= 2) {
+                hands.send({ image: videoElement }).then(() => {
+                    if (handTrackingActive) {
+                        handTrackingLoop = requestAnimationFrame(() => processFrame(videoElement));
+                    }
+                }).catch(err => {
+                    console.error('Hand detection error:', err);
+                    if (handTrackingActive) {
+                        handTrackingLoop = requestAnimationFrame(() => processFrame(videoElement));
+                    }
+                });
+            } else {
+                handTrackingLoop = requestAnimationFrame(() => processFrame(videoElement));
+            }
+        }
+
+        function onHandResults(results, canvasCtx, canvasElement, statusElement) {
+            // Clear canvas
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+
+                // Check gestures
+                const onlyIndexUp = isOnlyIndexExtended(landmarks);
+                const indexAndMiddleUp = isIndexAndMiddleExtended(landmarks);
+                const fingersGlued = indexAndMiddleUp && areFingersGlued(landmarks);
+
+                // Get thumb tip (4) and index finger tip (8)
+                const thumbTip = landmarks[4];
+                const indexTip = landmarks[8];
+                const middleTip = landmarks[12];
+
+                // Calculate distance between thumb and index finger
+                const dx = thumbTip.x - indexTip.x;
+                const dy = thumbTip.y - indexTip.y;
+                const pinchDistance = Math.sqrt(dx * dx + dy * dy);
+
+                if (onlyIndexUp || indexAndMiddleUp) {
+                    // POINTER MODE - index finger (or index+middle) controls mouse
+                    pointerMode = true;
+                    previousPinchDistance = null; // Reset scroll tracking
+
+                    // Use index finger position for cursor
+                    // Mirror X because video is flipped
+                    const screenX = (1 - indexTip.x) * window.innerWidth;
+                    const screenY = indexTip.y * window.innerHeight;
+
+                    handlePointerMove(screenX, screenY);
+
+                    // Z-axis push detection for click
+                    // Lower Z value = closer to camera
+                    const currentZ = indexTip.z;
+
+                    // Track Z history for velocity calculation
+                    zPushHistory.push(currentZ);
+                    if (zPushHistory.length > 5) {
+                        zPushHistory.shift(); // Keep last 5 frames
+                    }
+
+                    // Check for push (rapid decrease in Z = moving toward camera)
+                    let pushDetected = false;
+                    if (zPushHistory.length >= 3 && !pushClickCooldown) {
+                        // Calculate Z velocity (negative = pushing toward camera)
+                        const oldZ = zPushHistory[0];
+                        const newZ = zPushHistory[zPushHistory.length - 1];
+                        const zVelocity = newZ - oldZ;
+
+                        // Threshold for push detection (negative velocity = toward camera)
+                        if (zVelocity < -0.03) {
+                            pushDetected = true;
+                            handlePointerClick();
+                            pushClickCooldown = true;
+                            setTimeout(() => { pushClickCooldown = false; }, 600);
+                            console.log('Push detected! Z velocity:', zVelocity.toFixed(4));
+                        }
+                    }
+
+                    // Draw visuals
+                    if (pushDetected) {
+                        drawPushClick(canvasCtx, landmarks, canvasElement.width, canvasElement.height);
+                        statusElement.textContent = 'CLICK!';
+                    } else {
+                        drawPointerFingertip(canvasCtx, landmarks, canvasElement.width, canvasElement.height);
+                        statusElement.textContent = 'Pointer (push to click)';
+                    }
+                } else {
+                    // SCROLL MODE or neutral
+                    if (pointerMode) {
+                        // Was in pointer mode, now exiting
+                        hidePointerCursor();
+                        pointerMode = false;
+                        zPushHistory = []; // Reset Z tracking
+                    }
+
+                    // Draw minimal fingertip graphics
+                    drawFingertips(canvasCtx, landmarks, canvasElement.width, canvasElement.height);
+
+                    // Cumulative scroll - only scroll DOWN when fingers spread apart
+                    if (previousPinchDistance !== null) {
+                        const distanceChange = pinchDistance - previousPinchDistance;
+
+                        // Only scroll when fingers are spreading (positive change)
+                        if (distanceChange > 0.008) {
+                            const scrollAmount = distanceChange * pinchScrollSpeed * 150;
+                            window.scrollBy(0, scrollAmount);
+                        }
+                    }
+
+                    previousPinchDistance = pinchDistance;
+                    statusElement.textContent = 'Spread to scroll ' + (pinchDistance * 100).toFixed(0) + '%';
+                }
+            } else {
+                previousPinchDistance = null;
+                if (pointerMode) {
+                    hidePointerCursor();
+                    pointerMode = false;
+                }
+                statusElement.textContent = 'No hand detected';
+            }
+
+            canvasCtx.restore();
+        }
+
+        function drawClickGesture(ctx, landmarks, width, height) {
+            // Draw index and middle fingertips merged/glued with click effect
+            const indexTip = landmarks[8];
+            const middleTip = landmarks[12];
+
+            // Calculate center between the two fingers
+            const centerX = (1 - (indexTip.x + middleTip.x) / 2) * width;
+            const centerY = ((indexTip.y + middleTip.y) / 2) * height;
+
+            // Draw merged circle with pulse effect
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 15, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(100, 255, 150, 0.5)';
+            ctx.fill();
+            ctx.strokeStyle = '#64ff96';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Inner dot
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#64ff96';
+            ctx.fill();
+        }
+
+        function drawTwoFingerPointer(ctx, landmarks, width, height) {
+            // Draw index and middle fingertips 
+            const indexTip = landmarks[8];
+            const middleTip = landmarks[12];
+
+            const ix = (1 - indexTip.x) * width;
+            const iy = indexTip.y * height;
+            const mx = (1 - middleTip.x) * width;
+            const my = middleTip.y * height;
+
+            // Index finger - blue
+            ctx.beginPath();
+            ctx.arc(ix, iy, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(100, 200, 255, 0.9)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(ix, iy, 3, 0, 2 * Math.PI);
+            ctx.fillStyle = '#64c8ff';
+            ctx.fill();
+
+            // Middle finger - blue
+            ctx.beginPath();
+            ctx.arc(mx, my, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(100, 200, 255, 0.9)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(mx, my, 3, 0, 2 * Math.PI);
+            ctx.fillStyle = '#64c8ff';
+            ctx.fill();
+
+            // Draw other fingertips dimmed
+            const otherTips = [4, 16, 20];
+            otherTips.forEach(function (index) {
+                const landmark = landmarks[index];
+                const tx = (1 - landmark.x) * width;
+                const ty = landmark.y * height;
+
+                ctx.beginPath();
+                ctx.arc(tx, ty, 6, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+        }
+
+        function drawPushClick(ctx, landmarks, width, height) {
+            // Draw index fingertip with push/click effect
+            const indexTip = landmarks[8];
+            const x = (1 - indexTip.x) * width;
+            const y = indexTip.y * height;
+
+            // Outer pulse ring
+            ctx.beginPath();
+            ctx.arc(x, y, 18, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(100, 255, 150, 0.8)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Inner filled circle
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(100, 255, 150, 0.6)';
+            ctx.fill();
+
+            // Center dot
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#64ff96';
+            ctx.fill();
+        }
+
+        function drawPointerFingertip(ctx, landmarks, width, height) {
+            // Only draw index fingertip with special highlight
+            const indexTip = landmarks[8];
+            const x = (1 - indexTip.x) * width;
+            const y = indexTip.y * height;
+
+            // Outer glowing circle
+            ctx.beginPath();
+            ctx.arc(x, y, 12, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(100, 200, 255, 0.9)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Inner dot
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#64c8ff';
+            ctx.fill();
+
+            // Draw other fingertips dimmed
+            const otherTips = [4, 12, 16, 20];
+            otherTips.forEach(function (index) {
+                const landmark = landmarks[index];
+                const tx = (1 - landmark.x) * width;
+                const ty = landmark.y * height;
+
+                ctx.beginPath();
+                ctx.arc(tx, ty, 6, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+        }
+
+        function drawFingertips(ctx, landmarks, width, height) {
+            // Fingertip indices: thumb=4, index=8, middle=12, ring=16, pinky=20
+            const fingertips = [4, 8, 12, 16, 20];
+
+            fingertips.forEach(function (index) {
+                const landmark = landmarks[index];
+                const x = (1 - landmark.x) * width;
+                const y = landmark.y * height;
+
+                // Outer circle (ring)
+                ctx.beginPath();
+                ctx.arc(x, y, 10, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Inner dot
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+            });
+        }
+
+        function stopHandTracking() {
+            if (handTrackingLoop) {
+                cancelAnimationFrame(handTrackingLoop);
+                handTrackingLoop = null;
+            }
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+            if (hands) {
+                hands.close();
+                hands = null;
+            }
+            previousPinchDistance = null;
+
+            // Clean up pointer mode
+            hidePointerCursor();
+            pointerMode = false;
+            lastPointerX = null;
+            lastPointerY = null;
+
+            const videoElement = document.getElementById('hand-tracking-video');
+            if (videoElement) {
+                videoElement.srcObject = null;
+            }
+        }
+        // ============ END HAND TRACKING SYSTEM ============
+
         // Works data configuration - 11 works from videos folder
         const WORKS_DATA = [
             {
@@ -496,7 +1426,7 @@
                 id: 'google-think-apps',
                 title: 'GOOGLE THINK APPS',
                 folder: 'videos/GOOGLE THINK APPS',
-                videos: ['cover.mp4', 'video1.mp4', 'video2.mp4', 'video3.mp4'],
+                videos: ['video1.mp4', 'video2.mp4', 'video3.mp4'],
                 descFile: 'GOOGLE THINK APPS.txt',
                 description: 'Innovative app concepts developed for Google Think initiative.'
             },
@@ -517,6 +1447,14 @@
                 description: 'Visual presentation of AYDNA research paper findings.'
             },
             {
+                id: 'starhub',
+                title: 'STARHUB',
+                folder: 'videos/STARHUB',
+                videos: ['video1.mp4', 'video2.mp4'],
+                descFile: null,
+                description: 'Digital experience design for StarHub telecommunications.'
+            },
+            {
                 id: 'vision-sakip-sabanci',
                 title: 'VISION of SAKIP SABANCI',
                 folder: 'videos/VISION of SAKIP SABANCI',
@@ -525,19 +1463,19 @@
                 description: 'Tribute experience honoring the vision of Sakıp Sabancı.'
             },
             {
-                id: 'ford',
-                title: 'FORD',
-                folder: 'videos/FORD',
+                id: 'youtube',
+                title: 'YOUTUBE',
+                folder: 'videos/YOUTUBE',
                 videos: ['video1.mp4'],
                 descFile: null,
-                description: 'AI-generated scene creation for Ford commercial film production.'
+                description: 'Creative content and visual design for YouTube platform.'
             }
         ];
-        
+
         // Video elements for hover preview
         let workVideoElements = [];
         let workVideoTextures = [];
-        
+
         let scene, camera, renderer;
         let domeWireframe, domeSolid, terrainWireframe, terrainSolid, floorWireframe, floorSolid, starField;
         let horizonGlow;
@@ -550,23 +1488,23 @@
         let envMap = null; // HDRI environment map
         let billboardTextures = []; // Textures for billboards
         let billboardLogos = []; // 3D logo models for billboards
-        
+
         // Totem scene (separate overlay)
         let totemScene, totemCamera, totemRenderer;
         let totemLogo = null;
         let totemVisible = false;
-        
+
         // Works section - DNA spiral
         let worksSection = null;
         let workCards = [];
         let worksTextures = [];
         let worksSectionActive = false;
-        
+
         // Hover interaction for works
         let raycaster = new THREE.Raycaster();
         let hoveredWorkIndex = -1;
         let infoBox = null;
-        
+
         let mousePos = { x: 0, y: 0 };
         let smoothMousePos = { x: 0, y: 0 };
         let mouseWorldPos = new THREE.Vector3();
@@ -579,9 +1517,9 @@
         let scanWaves = [];
         let revealProgress = 0;
         let wireframeReveal = 0;
-        
+
         let LIGHT_DIR = new THREE.Vector3(0.3, 0.15, -1.0).normalize(); // Low sun from behind mountains
-        
+
         const CONFIG = {
             dome: { radius: 10, widthSegments: 64, heightSegments: 40 },
             terrain: { size: 500, segments: 400, noiseScale: 0.015, noiseHeight: 6, flatRadius: 55, transitionWidth: 40 },
@@ -608,7 +1546,7 @@
             scan: { duration: 4000, ringWidth: 0.5, maxRadius: 250 },
             animation: { cameraDuration: 5500, cameraDelay: 3500 }
         };
-        
+
         // Simplex Noise
         class SimplexNoise {
             constructor(seed = Math.random()) {
@@ -623,7 +1561,7 @@
                 this.perm = new Uint8Array(512);
                 for (let i = 0; i < 512; i++) this.perm[i] = this.p[i & 255];
             }
-            
+
             noise2D(x, y) {
                 const F2 = 0.5 * (Math.sqrt(3) - 1), G2 = (3 - Math.sqrt(3)) / 6;
                 let s = (x + y) * F2, i = Math.floor(x + s), j = Math.floor(y + s);
@@ -640,31 +1578,31 @@
                 if (t2 >= 0) { t2 *= t2; n2 = t2 * t2 * this.grad(this.perm[ii + 1 + this.perm[jj + 1]], x2, y2); }
                 return 70 * (n0 + n1 + n2);
             }
-            
+
             grad(hash, x, y) {
                 const h = hash & 7, u = h < 4 ? x : y, v = h < 4 ? y : x;
                 return ((h & 1) ? -u : u) + ((h & 2) ? -2 * v : 2 * v);
             }
         }
-        
+
         const noise = new SimplexNoise(42), noise2 = new SimplexNoise(123), noise3 = new SimplexNoise(789);
-        
+
         function init() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x000000);
             scene.fog = new THREE.FogExp2(0x111115, 0.012); // Atmospheric haze - subtle gray
-            
+
             camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1500);
             camera.position.set(CONFIG.camera.startPosition.x, CONFIG.camera.startPosition.y, CONFIG.camera.startPosition.z);
             camera.lookAt(CONFIG.camera.lookAt.x, CONFIG.camera.lookAt.y, CONFIG.camera.lookAt.z);
-            
+
             renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
-            
+
             // Load billboard textures
             const textureLoader = new THREE.TextureLoader();
             for (let i = 1; i <= 12; i++) {
@@ -672,7 +1610,7 @@
                 texture.encoding = THREE.sRGBEncoding;
                 billboardTextures.push(texture);
             }
-            
+
             createStarField();
             createFloor();
             createTerrain();
@@ -682,7 +1620,7 @@
             createBillboards();
             createSunLight();
             createWorksSection();
-            
+
             // Load 3D logos for billboards (index 0-5)
             addLogoToBillboard(0, 'logo_0.obj');
             addLogoToBillboard(1, 'logo_1.obj');
@@ -690,39 +1628,39 @@
             addLogoToBillboard(3, 'logo_3.obj');
             addLogoToBillboard(4, 'logo_4.obj');
             addLogoToBillboard(5, 'logo_5.fbx');
-            
+
             // Initialize totem scene (separate layer for Hagia logo)
             initTotemScene();
-            
+
             // Initialize HTML work panels overlay
             initWorksPanelsOverlay();
-            
+
             window.addEventListener('resize', onWindowResize, false);
             window.addEventListener('scroll', onScroll, false);
             window.addEventListener('mousemove', onMouseMove, false);
-            
+
             animate();
         }
-        
+
         // Open work detail page
         function openWorkDetail(workIndex) {
             const work = WORKS_DATA[workIndex];
             if (!work) return;
-            
+
             const detailPage = document.getElementById('work-detail-page');
             const titleEl = document.getElementById('detail-title');
             const videosEl = document.getElementById('detail-videos');
             const infoEl = document.getElementById('detail-info');
-            
+
             // Set title
             titleEl.textContent = work.title;
-            
+
             // Clear and add videos (big, vertical layout)
             videosEl.innerHTML = '';
-            work.videos.forEach(function(videoFile, idx) {
+            work.videos.forEach(function (videoFile, idx) {
                 var container = document.createElement('div');
                 container.className = 'work-video-container';
-                
+
                 var video = document.createElement('video');
                 video.src = work.folder + '/' + videoFile;
                 video.controls = true;
@@ -732,45 +1670,54 @@
                 video.preload = 'metadata';
                 video.setAttribute('playsinline', '');
                 video.setAttribute('webkit-playsinline', '');
-                
+
+                // Add cover image as poster
+                // videoFile is like 'video1.mp4', 'video2.mp4', etc.
+                var videoNum = videoFile.match(/video(\d+)/);
+                if (videoNum) {
+                    var coverPath = 'covers/' + videoNum[1] + '.png';
+                    video.poster = coverPath;
+                    console.log('Setting poster for', videoFile, ':', coverPath);
+                }
+
                 container.appendChild(video);
                 videosEl.appendChild(container);
             });
-            
+
             // Clear info section
             infoEl.innerHTML = '';
-            
+
             // Fetch and parse text file if it exists
             if (work.descFile) {
                 var textUrl = work.folder + '/' + work.descFile;
                 console.log('Fetching text file:', textUrl);
                 fetch(textUrl)
-                    .then(function(response) {
+                    .then(function (response) {
                         console.log('Response status:', response.status);
                         if (!response.ok) throw new Error('File not found: ' + response.status);
                         return response.text();
                     })
-                    .then(function(text) {
+                    .then(function (text) {
                         console.log('Raw text:', text);
-                        
+
                         // Parse the text file
                         var lines = text.split('\n');
                         var metaItems = [];
                         var overviewLines = [];
                         var passedMeta = false;
-                        
+
                         for (var i = 0; i < lines.length; i++) {
                             var line = lines[i];
                             var trimmed = line.trim();
-                            
+
                             if (!trimmed) continue;
-                            
+
                             // Skip "Overview" header
                             if (trimmed.toLowerCase() === 'overview') {
                                 passedMeta = true;
                                 continue;
                             }
-                            
+
                             // Try to match KEY   Value pattern (3+ spaces between)
                             var spaceIndex = trimmed.search(/\s{3,}/);
                             if (spaceIndex > 0 && !passedMeta) {
@@ -781,70 +1728,70 @@
                                     continue;
                                 }
                             }
-                            
+
                             // After we have meta items, everything else is overview
                             if (metaItems.length > 0 || passedMeta) {
                                 passedMeta = true;
                                 overviewLines.push(trimmed);
                             }
                         }
-                        
+
                         console.log('Meta items:', metaItems);
                         console.log('Overview lines:', overviewLines);
-                        
+
                         // Build and append meta section
                         if (metaItems.length > 0) {
                             var metaDiv = document.createElement('div');
                             metaDiv.className = 'work-detail-meta';
-                            
+
                             for (var j = 0; j < metaItems.length; j++) {
                                 var item = metaItems[j];
                                 var itemDiv = document.createElement('div');
                                 itemDiv.className = 'work-detail-meta-item';
-                                
+
                                 var labelDiv = document.createElement('div');
                                 labelDiv.className = 'work-detail-meta-label';
                                 labelDiv.textContent = item.label;
-                                
+
                                 var valueDiv = document.createElement('div');
                                 valueDiv.className = 'work-detail-meta-value';
                                 valueDiv.textContent = item.value;
-                                
+
                                 itemDiv.appendChild(labelDiv);
                                 itemDiv.appendChild(valueDiv);
                                 metaDiv.appendChild(itemDiv);
                             }
-                            
+
                             infoEl.appendChild(metaDiv);
                             console.log('Added meta div');
                         }
-                        
+
                         // Build and append overview section
                         if (overviewLines.length > 0) {
                             var overviewDiv = document.createElement('div');
                             overviewDiv.className = 'work-detail-overview';
-                            
+
                             for (var k = 0; k < overviewLines.length; k++) {
                                 var p = document.createElement('p');
                                 p.textContent = overviewLines[k];
                                 overviewDiv.appendChild(p);
                             }
-                            
+
                             infoEl.appendChild(overviewDiv);
                             console.log('Added overview div');
                         }
                     })
-                    .catch(function(e) {
+                    .catch(function (e) {
                         console.error('Error loading text file:', e);
                     });
             }
-            
+
             // Show the page
             detailPage.style.display = 'block';
             setTimeout(() => {
                 detailPage.classList.add('visible');
             }, 10);
-            
+
             // Pause all work preview videos
             window.galleryData.workPlanes.forEach(wp => {
                 if (wp.video && wp.isPlaying) {
@@ -853,35 +1800,35 @@
                 }
             });
         }
-        
+
         // Close work detail page
         function closeWorkDetail() {
             const detailPage = document.getElementById('work-detail-page');
             detailPage.classList.remove('visible');
-            
+
             // Stop all videos in detail page
             const videos = detailPage.querySelectorAll('video');
             videos.forEach(v => {
                 v.pause();
                 v.currentTime = 0;
             });
-            
+
             setTimeout(() => {
                 detailPage.style.display = 'none';
             }, 500);
         }
-        
+
         function onMouseMove(event) {
             // Normalize mouse position to -1 to 1
             mousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
             mousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
         }
-        
+
         function onScroll() {
             const scrollHeight = document.body.scrollHeight - window.innerHeight;
             const scrollTop = window.scrollY || window.pageYOffset;
             scrollProgress = Math.min(1, Math.max(0, scrollTop / scrollHeight));
-            
+
             // Detect any scroll movement and trigger new wave (only during descent phase - first 40% of scroll)
             const scrollDelta = Math.abs(scrollTop - lastScrollTop);
             if (scrollDelta > 3 && scrollProgress < 0.4) {
@@ -895,19 +1842,19 @@
                 });
             }
             lastScrollTop = scrollTop;
-            
+
             // Update reveal progress based on max scan radius reached (only during descent)
             if (scrollProgress < 0.4) {
                 revealProgress = Math.min(1, revealProgress + scrollDelta * 0.002);
             }
-            
+
             // Fade out scroll hint as user scrolls
             const scrollHint = document.querySelector('.scroll-hint');
             if (scrollHint) {
                 scrollHint.style.opacity = Math.max(0, 1 - scrollProgress * 5);
             }
         }
-        
+
         function createStarField() {
             const geo = new THREE.BufferGeometry();
             const count = 8000;
@@ -923,7 +1870,7 @@
             }
             geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
             geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-            
+
             const mat = new THREE.ShaderMaterial({
                 uniforms: {
                     starOpacity: { value: 0.0 }
@@ -954,19 +1901,19 @@
             starField = new THREE.Points(geo, mat);
             scene.add(starField);
         }
-        
+
         function createGridLines(geometry) {
             const pos = geometry.attributes.position.array;
             const segmentsX = Math.round(Math.sqrt(pos.length / 3)) - 1;
             const segmentsY = segmentsX;
             const vertices = [];
             const width = segmentsX + 1;
-            
+
             for (let j = 0; j <= segmentsY; j++) {
                 for (let i = 0; i <= segmentsX; i++) {
                     const idx = (j * width + i) * 3;
                     const x = pos[idx], y = pos[idx + 1], z = pos[idx + 2];
-                    
+
                     if (i < segmentsX) {
                         const nextIdx = (j * width + i + 1) * 3;
                         vertices.push(x, y, z, pos[nextIdx], pos[nextIdx + 1], pos[nextIdx + 2]);
@@ -977,18 +1924,18 @@
                     }
                 }
             }
-            
+
             const lineGeo = new THREE.BufferGeometry();
             lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
             return lineGeo;
         }
-        
+
         function createDome() {
             const geo = new THREE.SphereGeometry(CONFIG.dome.radius, CONFIG.dome.widthSegments, CONFIG.dome.heightSegments, 0, Math.PI * 2, 0, Math.PI / 2);
-            
+
             // Solid dome - pitch black, high contrast glass-like reflections with dissolve effect
             const solidMat = new THREE.ShaderMaterial({
-                uniforms: { 
+                uniforms: {
                     cameraPos: { value: camera.position },
                     lightDir: { value: LIGHT_DIR },
                     dissolveProgress: { value: 0.0 },
@@ -1081,11 +2028,11 @@
             domeSolid = new THREE.Mesh(geo.clone(), solidMat);
             domeSolid.renderOrder = 1;
             scene.add(domeSolid);
-            
+
             // Wireframe dome - starts black, revealed by scan, with mouse glow and shockwave
             const wireGeo = new THREE.EdgesGeometry(geo, 1);
             const wireMat = new THREE.ShaderMaterial({
-                uniforms: { 
+                uniforms: {
                     scanRadii: { value: new Float32Array(10) },
                     scanCount: { value: 0 },
                     revealRadius: { value: 0 },
@@ -1200,58 +2147,58 @@
             domeWireframe.renderOrder = 3;
             scene.add(domeWireframe);
         }
-        
+
         function createTerrain() {
             const geo = new THREE.PlaneGeometry(CONFIG.terrain.size, CONFIG.terrain.size, CONFIG.terrain.segments, CONFIG.terrain.segments);
             const pos = geo.attributes.position.array;
-            
+
             for (let i = 0; i < pos.length; i += 3) {
                 const x = pos[i], y = pos[i + 1];
                 const dist = Math.sqrt(x * x + y * y);
-                
+
                 let hm = smoothstep(CONFIG.terrain.flatRadius, CONFIG.terrain.flatRadius + CONFIG.terrain.transitionWidth, dist);
-                
+
                 let h = 0;
                 let baseNoise = noise.noise2D(x * 0.008, y * 0.008);
                 let midNoise = noise2.noise2D(x * 0.015, y * 0.015);
-                
+
                 let ridgeNoise1 = 1.0 - Math.abs(noise.noise2D(x * 0.012, y * 0.012));
                 let ridgeNoise2 = 1.0 - Math.abs(noise2.noise2D(x * 0.025, y * 0.025));
                 let ridgeNoise3 = 1.0 - Math.abs(noise3.noise2D(x * 0.05, y * 0.05));
-                
+
                 let ridges = ridgeNoise1 * ridgeNoise1 * 1.5;
                 ridges += ridgeNoise2 * ridgeNoise2 * 0.6;
                 ridges += ridgeNoise3 * ridgeNoise3 * 0.2;
-                
+
                 let valleyNoise = noise3.noise2D(x * 0.02, y * 0.02);
                 let valleys = Math.pow(Math.abs(valleyNoise), 0.5) * Math.sign(valleyNoise);
-                
+
                 let detail1 = noise.noise2D(x * 0.06, y * 0.06) * 0.15;
                 let detail2 = noise2.noise2D(x * 0.12, y * 0.12) * 0.08;
                 let detail3 = noise3.noise2D(x * 0.25, y * 0.25) * 0.04;
                 let detail4 = noise.noise2D(x * 0.5, y * 0.5) * 0.02;
-                
+
                 let erosion = noise2.noise2D(x * 0.08 + valleys * 2.0, y * 0.08 + valleys * 2.0) * 0.1;
-                
+
                 h = baseNoise * 0.5 + midNoise * 0.8;
                 h += ridges * 1.2;
                 h += valleys * 0.3;
                 h += detail1 + detail2 + detail3 + detail4;
                 h += erosion;
-                
+
                 h = Math.max(0, h);
                 h = Math.pow(h, 1.1);
-                
+
                 let distanceFalloff = 1.0 - smoothstep(100.0, 250.0, dist) * 0.3;
-                
+
                 pos[i + 2] = h * CONFIG.terrain.noiseHeight * hm * distanceFalloff;
             }
             geo.computeVertexNormals();
-            
+
             // Solid terrain - pitch black, high contrast with edge reflections and organic dissolve
             const solidMat = new THREE.ShaderMaterial({
-                uniforms: { 
-                    cameraPos: { value: camera.position }, 
+                uniforms: {
+                    cameraPos: { value: camera.position },
                     lightDir: { value: LIGHT_DIR },
                     dissolveProgress: { value: 0.0 },
                     time: { value: 0.0 },
@@ -1478,12 +2425,12 @@
             terrainSolid.receiveShadow = true;
             terrainSolid.renderOrder = 0;
             scene.add(terrainSolid);
-            
+
             // 3D FRAGMENT CUBES - instanced tiny cubes for disintegration effect
             const fragmentCount = 120000; // More cubes
             const fragmentSize = 0.25; // Base size (will have variation)
             const fragmentGeo = new THREE.BoxGeometry(fragmentSize, fragmentSize, fragmentSize);
-            
+
             const fragmentMat = new THREE.ShaderMaterial({
                 uniforms: {
                     dissolveProgress: { value: 0.0 },
@@ -1636,10 +2583,10 @@
                 depthWrite: true,
                 side: THREE.FrontSide
             });
-            
+
             // Create instanced mesh
             const fragmentMesh = new THREE.InstancedMesh(fragmentGeo, fragmentMat, fragmentCount);
-            
+
             // Set up instance attributes
             const instancePositions = new Float32Array(fragmentCount * 3);
             const instanceVelocities = new Float32Array(fragmentCount * 3);
@@ -1647,34 +2594,34 @@
             const instanceDists = new Float32Array(fragmentCount);
             const instanceSizes = new Float32Array(fragmentCount);
             const instanceGlows = new Float32Array(fragmentCount);
-            
+
             for (let i = 0; i < fragmentCount; i++) {
                 // Random position on terrain (in world space, terrain is rotated)
                 const angle = Math.random() * Math.PI * 2;
                 const dist = 8 + Math.random() * 110; // From dome edge to terrain edge
                 const x = Math.cos(angle) * dist;
                 const z = Math.sin(angle) * dist;
-                
+
                 // Sample terrain height at this position (approximate)
                 const terrainNoise = (Math.sin(x * 0.05) + Math.cos(z * 0.05)) * 0.5;
                 const y = Math.max(0, terrainNoise * 2);
-                
+
                 instancePositions[i * 3] = x;
                 instancePositions[i * 3 + 1] = y;
                 instancePositions[i * 3 + 2] = z;
-                
+
                 // Velocity - outward and upward
                 const outwardDir = new THREE.Vector3(x, 0, z).normalize();
                 const upward = 0.4 + Math.random() * 0.6;
                 const scatter = (Math.random() - 0.5) * 0.4;
-                
+
                 instanceVelocities[i * 3] = outwardDir.x * (0.4 + Math.random() * 0.6) + scatter;
                 instanceVelocities[i * 3 + 1] = upward;
                 instanceVelocities[i * 3 + 2] = outwardDir.z * (0.4 + Math.random() * 0.6) + scatter;
-                
+
                 instanceSeeds[i] = Math.random();
                 instanceDists[i] = dist;
-                
+
                 // Size variation - larger cubes overall
                 const sizeRand = Math.random();
                 if (sizeRand < 0.5) {
@@ -1684,29 +2631,29 @@
                 } else {
                     instanceSizes[i] = 2.2 + Math.random() * 1.3; // Large: 2.2-3.5
                 }
-                
+
                 // Glow - about 8% of cubes glow
                 instanceGlows[i] = Math.random() < 0.08 ? 0.7 + Math.random() * 0.3 : 0.0;
             }
-            
+
             fragmentGeo.setAttribute('instancePosition', new THREE.InstancedBufferAttribute(instancePositions, 3));
             fragmentGeo.setAttribute('instanceVelocity', new THREE.InstancedBufferAttribute(instanceVelocities, 3));
             fragmentGeo.setAttribute('instanceSeed', new THREE.InstancedBufferAttribute(instanceSeeds, 1));
             fragmentGeo.setAttribute('instanceDist', new THREE.InstancedBufferAttribute(instanceDists, 1));
             fragmentGeo.setAttribute('instanceSize', new THREE.InstancedBufferAttribute(instanceSizes, 1));
             fragmentGeo.setAttribute('instanceGlow', new THREE.InstancedBufferAttribute(instanceGlows, 1));
-            
+
             fragmentMesh.frustumCulled = false;
             fragmentMesh.visible = false; // Start hidden
             scene.add(fragmentMesh);
-            
+
             // Store reference for animation
             window.terrainFragments = fragmentMesh;
-            
+
             // Wireframe terrain - starts black, revealed by scan, with mouse glow and dissolve
             const lineGeo = createGridLines(geo);
             const wireMat = new THREE.ShaderMaterial({
-                uniforms: { 
+                uniforms: {
                     scanRadii: { value: new Float32Array(10) },
                     scanCount: { value: 0 },
                     revealRadius: { value: 0 },
@@ -1832,14 +2779,14 @@
             terrainWireframe.renderOrder = 2;
             scene.add(terrainWireframe);
         }
-        
+
         function createFloor() {
             const geo = new THREE.PlaneGeometry(CONFIG.floor.size, CONFIG.floor.size, CONFIG.floor.segments, CONFIG.floor.segments);
-            
+
             // Solid floor - pitch black, high contrast glass-like reflections with dissolve
             const solidMat = new THREE.ShaderMaterial({
-                uniforms: { 
-                    cameraPos: { value: camera.position }, 
+                uniforms: {
+                    cameraPos: { value: camera.position },
                     lightDir: { value: LIGHT_DIR },
                     dissolveProgress: { value: 0.0 },
                     time: { value: 0.0 },
@@ -1965,11 +2912,11 @@
             floorSolid.receiveShadow = true;
             floorSolid.renderOrder = 0;
             // scene.add(floorSolid); // REMOVED - not needed
-            
+
             // Wireframe floor - starts black, revealed by scan, with mouse glow and dissolve
             const lineGeo = createGridLines(geo);
             const wireMat = new THREE.ShaderMaterial({
-                uniforms: { 
+                uniforms: {
                     scanRadii: { value: new Float32Array(10) },
                     scanCount: { value: 0 },
                     revealRadius: { value: 0 },
@@ -2105,14 +3052,14 @@
                 `,
                 transparent: true
             });
-            
+
             floorWireframe = new THREE.LineSegments(lineGeo, wireMat);
             floorWireframe.rotation.x = -Math.PI / 2;
             floorWireframe.position.y = -0.03;
             floorWireframe.renderOrder = 2;
             // scene.add(floorWireframe); // REMOVED - not needed
         }
-        
+
         function createGlowRing() {
             // Very thin glowing ring that follows the wave
             const geo = new THREE.RingGeometry(0.995, 1.005, 128);
@@ -2145,14 +3092,14 @@
                 depthWrite: false,
                 blending: THREE.AdditiveBlending
             });
-            
+
             const ring = new THREE.Mesh(geo, mat);
             ring.rotation.x = -Math.PI / 2;
             ring.position.y = 0.15;
             scene.add(ring);
             return ring;
         }
-        
+
         function createSunLight() {
             // Directional sun light
             sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -2160,7 +3107,7 @@
             sunLight.target.position.set(0, 0, 0);
             scene.add(sunLight);
             scene.add(sunLight.target);
-            
+
             // Very subtle top-down light
             const topLight = new THREE.DirectionalLight(0xffffff, 0.15);
             topLight.position.set(0, 100, 0);
@@ -2168,7 +3115,7 @@
             scene.add(topLight);
             scene.add(topLight.target);
         }
-        
+
         function createHorizonGlow() {
             // Atmospheric haze - white gradient at horizon
             const hazeGeo = new THREE.PlaneGeometry(600, 100);
@@ -2196,13 +3143,13 @@
             haze = new THREE.Mesh(hazeGeo, hazeMat);
             haze.position.set(0, 8, -120);
             scene.add(haze);
-            
+
             // Second haze layer further back
             haze2 = new THREE.Mesh(hazeGeo.clone(), hazeMat.clone());
             haze2.position.set(0, 12, -180);
             haze2.scale.set(1.5, 1.2, 1);
             scene.add(haze2);
-            
+
             // Subtle horizon line glow
             const horizonGeo = new THREE.PlaneGeometry(800, 30);
             const horizonMat = new THREE.ShaderMaterial({
@@ -2229,18 +3176,18 @@
             horizonGlow.lookAt(0, 0.5, 0);
             scene.add(horizonGlow);
         }
-        
+
         function createHagiaLogo() {
             // Create HAGIA logo from uploaded OBJ model
             hagiaLogo = new THREE.Group();
-            
+
             // Create procedural environment cubemap for realistic reflections
             const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
                 format: THREE.RGBAFormat,
                 generateMipmaps: true,
                 minFilter: THREE.LinearMipmapLinearFilter
             });
-            
+
             // Create a simple gradient environment
             const envScene = new THREE.Scene();
             const envGeo = new THREE.SphereGeometry(500, 32, 32);
@@ -2303,12 +3250,12 @@
             });
             const envMesh = new THREE.Mesh(envGeo, envMat);
             envScene.add(envMesh);
-            
+
             // Render environment to cubemap
             const cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
             cubeCamera.update(renderer, envScene);
             envMap = cubeRenderTarget.texture;
-            
+
             // Create logo material with dissolve uniforms for onBeforeCompile injection
             const logoDissolveUniforms = {
                 dissolveProgress: { value: 0.0 },
@@ -2317,7 +3264,7 @@
                 edgeWidth: { value: 0.15 },
                 edgeColor: { value: new THREE.Color(0.7, 0.7, 0.75) }
             };
-            
+
             // Black hyper-reflective material with HDRI reflections
             const logoMat = new THREE.MeshStandardMaterial({
                 color: 0x000000,
@@ -2328,16 +3275,16 @@
                 side: THREE.DoubleSide,
                 transparent: true
             });
-            
+
             // Inject dissolve effect into the material
-            logoMat.onBeforeCompile = function(shader) {
+            logoMat.onBeforeCompile = function (shader) {
                 // Add uniforms
                 shader.uniforms.dissolveProgress = logoDissolveUniforms.dissolveProgress;
                 shader.uniforms.dissolveTime = logoDissolveUniforms.dissolveTime;
                 shader.uniforms.noiseFreq = logoDissolveUniforms.noiseFreq;
                 shader.uniforms.edgeWidth = logoDissolveUniforms.edgeWidth;
                 shader.uniforms.edgeColor = logoDissolveUniforms.edgeColor;
-                
+
                 // Add varyings and noise function to vertex shader
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <common>',
@@ -2349,7 +3296,7 @@
                     `#include <worldpos_vertex>
                     vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;`
                 );
-                
+
                 // Add dissolve logic to fragment shader
                 shader.fragmentShader = shader.fragmentShader.replace(
                     '#include <common>',
@@ -2407,7 +3354,7 @@
                         return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
                     }`
                 );
-                
+
                 // Add dissolve discard and edge glow before output
                 shader.fragmentShader = shader.fragmentShader.replace(
                     '#include <dithering_fragment>',
@@ -2434,47 +3381,47 @@
                     // Fadeout
                     gl_FragColor.a *= 1.0 - smoothstep(0.6, 0.95, dissolveProgress);`
                 );
-                
+
                 // Store reference for updating
                 logoMat.userData.shader = shader;
             };
-            
+
             // Store uniforms reference for animation
             logoMat.userData.dissolveUniforms = logoDissolveUniforms;
-            
+
             // Add dedicated lights for the logo to ensure it's always visible
             const logoLight1 = new THREE.PointLight(0xffffff, 2, 50);
             logoLight1.position.set(0, 10, 0);
             hagiaLogo.add(logoLight1);
-            
+
             const logoLight2 = new THREE.PointLight(0xffffff, 1.5, 40);
             logoLight2.position.set(10, 5, 10);
             hagiaLogo.add(logoLight2);
-            
+
             const logoLight3 = new THREE.PointLight(0xffffff, 1.5, 40);
             logoLight3.position.set(-10, 5, -10);
             hagiaLogo.add(logoLight3);
-            
+
             // Ambient light boost for the scene
             const ambientBoost = new THREE.AmbientLight(0xffffff, 0.3);
             scene.add(ambientBoost);
-            
+
             // Load OBJ model from external file
             const loader = new THREE.OBJLoader();
-            
+
             // Load OBJ from file
-            loader.load('higia_logo.obj', function(obj) {
+            loader.load('higia_logo.obj', function (obj) {
                 console.log('OBJ model loaded successfully');
-                
+
                 // Create artistic dissolution effect for each mesh
-                obj.traverse(function(child) {
+                obj.traverse(function (child) {
                     if (child.isMesh) {
                         // Keep the original geometry
                         let geometry = child.geometry;
                         if (geometry.index) {
                             geometry = geometry.toNonIndexed();
                         }
-                        
+
                         // Create detailed artistic dissolution shader material
                         const dissolveMat = new THREE.ShaderMaterial({
                             uniforms: {
@@ -2656,51 +3603,51 @@
                             side: THREE.DoubleSide,
                             depthWrite: true
                         });
-                        
+
                         dissolveMat.userData.dissolveUniforms = logoDissolveUniforms;
-                        
+
                         child.geometry = geometry;
                         child.material = dissolveMat;
                     }
                 });
-                
+
                 // Get bounding box to center and scale
                 const box = new THREE.Box3().setFromObject(obj);
                 const center = box.getCenter(new THREE.Vector3());
                 const size = box.getSize(new THREE.Vector3());
-                
+
                 console.log('Model size:', size);
                 console.log('Model center:', center);
-                
+
                 // Center horizontally, but place bottom on floor
                 obj.position.x = -center.x;
                 obj.position.z = -center.z;
                 obj.position.y = -box.min.y; // Move up so bottom is at y=0
-                
+
                 // Scale to fit dome (target width ~20 units)
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const targetSize = 20;
                 const scale = targetSize / maxDim;
                 obj.scale.setScalar(scale);
-                
+
                 // Adjust Y position after scaling to keep bottom on floor
                 obj.position.y = (-box.min.y) * scale;
-                
+
                 hagiaLogo.add(obj);
-                
+
             });
-            
+
             // Position inside dome - on the ground
             hagiaLogo.position.set(0, 0, 0);
             hagiaLogo.visible = false;
-            
+
             scene.add(hagiaLogo);
         }
-        
-        
+
+
         function createBillboards() {
             const cfg = CONFIG.billboards;
-            
+
             for (let i = 0; i < cfg.count; i++) {
                 // Distribute evenly around full circle
                 const arcSpread = cfg.arcSpread || Math.PI * 2;
@@ -2708,12 +3655,12 @@
                 const angle = (i / cfg.count) * arcSpread;
                 const x = Math.sin(angle) * cfg.radius;
                 const z = Math.cos(angle) * cfg.radius;
-                
+
                 // Create billboard group
                 const group = new THREE.Group();
                 group.position.set(x, -cfg.height, z); // Start below ground
                 group.lookAt(0, group.position.y, 0); // Face the dome
-                
+
                 // Shader material with texture and flickering dissolve
                 const fillGeo = new THREE.PlaneGeometry(cfg.width, cfg.height);
                 const fillMat = new THREE.ShaderMaterial({
@@ -2813,14 +3760,14 @@
                 });
                 const fill = new THREE.Mesh(fillGeo, fillMat);
                 group.add(fill);
-                
+
                 // Border with same shader and flickering dissolve
                 const borderVertices = [
-                    -cfg.width/2, -cfg.height/2, 0.01,
-                    cfg.width/2, -cfg.height/2, 0.01,
-                    cfg.width/2, cfg.height/2, 0.01,
-                    -cfg.width/2, cfg.height/2, 0.01,
-                    -cfg.width/2, -cfg.height/2, 0.01
+                    -cfg.width / 2, -cfg.height / 2, 0.01,
+                    cfg.width / 2, -cfg.height / 2, 0.01,
+                    cfg.width / 2, cfg.height / 2, 0.01,
+                    -cfg.width / 2, cfg.height / 2, 0.01,
+                    -cfg.width / 2, -cfg.height / 2, 0.01
                 ];
                 const borderGeo = new THREE.BufferGeometry();
                 borderGeo.setAttribute('position', new THREE.Float32BufferAttribute(borderVertices, 3));
@@ -2886,7 +3833,7 @@
                 });
                 const border = new THREE.Line(borderGeo, borderMat);
                 group.add(border);
-                
+
                 scene.add(group);
                 billboards.push({
                     group: group,
@@ -2899,31 +3846,31 @@
                 });
             }
         }
-        
+
         // Function to add 3D logo model to a specific billboard
         function addLogoToBillboard(billboardIndex, objUrl) {
             if (billboardIndex < 0 || billboardIndex >= billboards.length) {
                 console.error('Invalid billboard index:', billboardIndex);
                 return;
             }
-            
+
             const bb = billboards[billboardIndex];
             const cfg = CONFIG.billboards;
-            
+
             // Check if it's an FBX file
             const isFBX = objUrl.toLowerCase().endsWith('.fbx');
             const loader = isFBX ? new THREE.FBXLoader() : new THREE.OBJLoader();
-            
-            loader.load(objUrl, function(obj) {
+
+            loader.load(objUrl, function (obj) {
                 // Calculate bounding box to fit the model
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3());
                 const center = box.getCenter(new THREE.Vector3());
-                
+
                 // Debug: count meshes and vertices
                 let meshCount = 0;
                 let vertexCount = 0;
-                obj.traverse(function(child) {
+                obj.traverse(function (child) {
                     if (child.isMesh) {
                         meshCount++;
                         if (child.geometry.attributes.position) {
@@ -2932,21 +3879,21 @@
                     }
                 });
                 console.log('Logo', billboardIndex, objUrl, '- meshes:', meshCount, 'vertices:', vertexCount, 'size:', size.x.toFixed(2), size.y.toFixed(2), size.z.toFixed(2));
-                
+
                 // Scale to fit inside billboard - make logos bigger
                 const scaleX = (cfg.width * 1.2) / size.x;
                 const scaleY = (cfg.height * 1.2) / size.y;
                 const scale = Math.min(scaleX, scaleY);
-                
+
                 obj.scale.set(scale, scale, scale);
-                
+
                 // Center the model
                 obj.position.set(
                     -center.x * scale,
                     -center.y * scale,
                     0.5
                 );
-                
+
                 // Apply white reflective material
                 const logoMaterial = new THREE.ShaderMaterial({
                     uniforms: {
@@ -3008,93 +3955,93 @@
                     `,
                     side: THREE.DoubleSide
                 });
-                
+
                 // Store material reference for time update
                 bb.logoMaterial = logoMaterial;
-                
-                obj.traverse(function(child) {
+
+                obj.traverse(function (child) {
                     if (child.isMesh) {
                         child.material = logoMaterial;
                         child.castShadow = true;
                         child.receiveShadow = true;
                     }
                 });
-                
+
                 bb.group.add(obj);
                 bb.logo3D = obj;
                 billboardLogos[billboardIndex] = obj;
-                
+
                 // Hide the rectangle (fill plane and border) since we have 3D logo
                 bb.fill.visible = false;
                 bb.border.visible = false;
-                
+
                 console.log('3D logo added to billboard', billboardIndex);
             });
         }
-        
+
         function createWorksSection() {
             // Create works section group - now goes directly to gallery
             worksSection = new THREE.Group();
             worksSection.position.y = 0;
             worksSection.visible = false;
             scene.add(worksSection);
-            
+
             // ===== GALLERY SPACE =====
             createGallerySpace();
         }
-        
+
         function initTotemScene() {
             const container = document.getElementById('totem-container');
-            
+
             // Create separate scene for totem
             totemScene = new THREE.Scene();
-            
+
             // Camera looking from top (Y axis is up)
             totemCamera = new THREE.PerspectiveCamera(30, 200 / 400, 0.1, 1000);
             totemCamera.position.set(0, 0, 50); // Position in front, looking at model
             totemCamera.lookAt(0, 0, 0);
-            
+
             // Create renderer with transparent background
-            totemRenderer = new THREE.WebGLRenderer({ 
-                antialias: true, 
-                alpha: true 
+            totemRenderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
             });
             totemRenderer.setSize(200, 400);
             totemRenderer.setPixelRatio(window.devicePixelRatio);
             totemRenderer.setClearColor(0x000000, 0);
             container.appendChild(totemRenderer.domElement);
-            
+
             // Add lights to totem scene - increased intensity
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             totemScene.add(ambientLight);
-            
+
             const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
             directionalLight.position.set(5, 10, 5);
             totemScene.add(directionalLight);
-            
+
             const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1.2);
             directionalLight2.position.set(-5, 10, -5);
             totemScene.add(directionalLight2);
-            
+
             // Load Hagia logo for totem
             const loader = new THREE.OBJLoader();
-            loader.load('higia_logo.obj', function(obj) {
+            loader.load('higia_logo.obj', function (obj) {
                 // Calculate bounding box
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3());
                 const center = box.getCenter(new THREE.Vector3());
-                
+
                 // Scale to fit view
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const scale = 15 / maxDim;
                 obj.scale.setScalar(scale);
-                
+
                 // Center the model
                 obj.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
-                
+
                 // Rotate model to lay flat (top view) - looking down at it
                 obj.rotation.x = Math.PI / 2;
-                
+
                 // Apply black reflective material with increased light response
                 const totemMaterial = new THREE.ShaderMaterial({
                     uniforms: {
@@ -3146,49 +4093,50 @@
                     `,
                     side: THREE.DoubleSide
                 });
-                
-                obj.traverse(function(child) {
+
+                obj.traverse(function (child) {
                     if (child.isMesh) {
                         child.material = totemMaterial;
                     }
                 });
-                
+
                 totemLogo = obj;
                 totemScene.add(obj);
-                
+
                 // Store base rotation for tilt calculations
                 window.totemBaseRotation = { x: Math.PI / 2, y: 0, z: 0 };
             });
         }
-        
+
         function updateTotem(time) {
             if (!totemLogo || !totemRenderer) return;
-            
+
             // Tilt based on mouse position (mousePos is already normalized -1 to 1)
             const tiltAmount = 0.3; // Max tilt in radians
             const targetTiltX = window.totemBaseRotation.x + mousePos.y * tiltAmount;
             const targetTiltY = window.totemBaseRotation.y + mousePos.x * tiltAmount;
-            
+
             // Smooth lerp to target tilt
             totemLogo.rotation.x += (targetTiltX - totemLogo.rotation.x) * 0.08;
             totemLogo.rotation.y += (targetTiltY - totemLogo.rotation.y) * 0.08;
-            
+
             // Render totem scene
             totemRenderer.render(totemScene, totemCamera);
         }
-        
+
         // Initialize HTML-based work panels overlay
         function initWorksPanelsOverlay() {
             const overlay = document.getElementById('works-panels-overlay');
             if (!overlay) return;
-            
+
             // Clear existing panels
             overlay.innerHTML = '';
-            
-            // Panel layout configuration - alternating zigzag
+
+            // Panel layout configuration - 2 columns
+            const leftCount = 6;
             const panelWidth = 420;
             const panelHeight = 260;
-            const verticalGap = 150; // Vertical gap between rows
+            const verticalGap = 300;
             const horizontalGap = 300;
 
             // Calculate positions - centered on screen
@@ -3196,7 +4144,7 @@
 
             // Left column X position
             const leftX = centerX - panelWidth - horizontalGap / 2;
-            // Right column X position
+            // Right column X position  
             const rightX = centerX + horizontalGap / 2;
 
             // Store panel data for scrolling
@@ -3204,23 +4152,23 @@
 
             WORKS_DATA.forEach((work, index) => {
                 const panel = document.createElement('div');
-                // Alternate left/right based on even/odd index
-                const isLeft = index % 2 === 0;
-                panel.className = 'work-panel ' + (isLeft ? 'left' : 'right');
+                panel.className = 'work-panel ' + (index < leftCount ? 'left' : 'right');
                 panel.dataset.workIndex = index;
 
-                // Calculate base Y position - each item goes down progressively
+                // Calculate base Y position (will be adjusted by scroll)
                 let x, baseY;
-                if (isLeft) {
+                if (index < leftCount) {
+                    // Left column
                     x = leftX;
+                    baseY = index * (panelHeight + verticalGap);
                 } else {
+                    // Right column
                     x = rightX;
+                    baseY = (index - leftCount) * (panelHeight + verticalGap);
                 }
-                // Each panel is offset vertically by half the height + gap
-                baseY = index * (panelHeight / 2 + verticalGap);
-                
+
                 panel.style.left = x + 'px';
-                
+
                 // Create video element
                 var video = document.createElement('video');
                 video.src = work.folder + '/video1.mp4';
@@ -3232,46 +4180,62 @@
                 video.style.height = '100%';
                 video.style.objectFit = 'cover';
                 video.style.display = 'block';
-                
-                // Simple approach: just load and seek when ready
-                video.onloadedmetadata = function() {
-                    video.currentTime = 1.0;
-                };
-                
+
                 panel.appendChild(video);
-                
+
+                // Create cover image overlay
+                var cover = document.createElement('img');
+                cover.src = 'covers/' + (index + 1) + '.png';
+                cover.style.position = 'absolute';
+                cover.style.top = '0';
+                cover.style.left = '0';
+                cover.style.width = '100%';
+                cover.style.height = '100%';
+                cover.style.objectFit = 'cover';
+                cover.style.transition = 'opacity 0.3s ease';
+                cover.style.pointerEvents = 'none';
+                cover.onerror = function () {
+                    // If cover image doesn't exist, hide it
+                    cover.style.display = 'none';
+                };
+                panel.appendChild(cover);
+
                 // Title overlay
                 var title = document.createElement('div');
                 title.className = 'work-panel-title';
                 title.textContent = work.title;
                 panel.appendChild(title);
-                
+
                 // Corner decorations
                 var corners = document.createElement('div');
                 corners.className = 'work-panel-corners';
                 corners.innerHTML = '<div class="work-panel-corner tl"></div><div class="work-panel-corner tr"></div><div class="work-panel-corner bl"></div><div class="work-panel-corner br"></div>';
                 panel.appendChild(corners);
-                
-                // Hover events for video
-                panel.onmouseenter = function() {
-                    video.currentTime = 0;
-                    video.play();
-                };
-                
-                panel.onmouseleave = function() {
-                    video.pause();
-                    video.currentTime = 1.0;
-                };
-                
+
+                // Hover events - hide cover and play video
+                (function (vid, cov) {
+                    panel.onmouseenter = function () {
+                        cov.style.opacity = '0';
+                        vid.currentTime = 0;
+                        vid.play();
+                    };
+
+                    panel.onmouseleave = function () {
+                        cov.style.opacity = '1';
+                        vid.pause();
+                        vid.currentTime = 0;
+                    };
+                })(video, cover);
+
                 // Click to open detail
-                (function(idx) {
-                    panel.onclick = function() {
+                (function (idx) {
+                    panel.onclick = function () {
                         openWorkDetail(idx);
                     };
                 })(index);
-                
+
                 overlay.appendChild(panel);
-                
+
                 // Store panel data for scroll animation
                 window.workPanelsData.push({
                     element: panel,
@@ -3279,22 +4243,22 @@
                     video: video
                 });
             });
-            
+
             // Store reference
             window.worksPanelsOverlay = overlay;
-            
+
             // Create connection lines between panels
             createPanelConnectionLines();
         }
-        
+
         // Create thin white lines connecting panels
         function createPanelConnectionLines() {
             const overlay = document.getElementById('works-panels-overlay');
             if (!overlay || !window.workPanelsData) return;
-            
+
             // Remove existing lines
             overlay.querySelectorAll('.work-panel-line').forEach(l => l.remove());
-            
+
             const leftCount = 6;
             const panelWidth = 420;
             const panelHeight = 260;
@@ -3303,10 +4267,10 @@
             const centerX = window.innerWidth / 2;
             const leftX = centerX - panelWidth - horizontalGap / 2;
             const rightX = centerX + horizontalGap / 2;
-            
+
             // Store line data for scroll animation
             window.connectionLinesData = [];
-            
+
             // Vertical lines - left column (connect panels 0-1, 1-2, 2-3, 3-4, 4-5)
             for (let i = 0; i < leftCount - 1; i++) {
                 const line = document.createElement('div');
@@ -3314,7 +4278,7 @@
                 line.style.left = (leftX + panelWidth / 2) + 'px';
                 line.style.height = verticalGap + 'px';
                 overlay.appendChild(line);
-                
+
                 window.connectionLinesData.push({
                     element: line,
                     type: 'vertical',
@@ -3323,7 +4287,7 @@
                     baseY: (i + 1) * (panelHeight + verticalGap) - verticalGap
                 });
             }
-            
+
             // Vertical lines - right column (connect panels 6-7, 7-8, 8-9, 9-10)
             for (let i = 0; i < 4; i++) {
                 const line = document.createElement('div');
@@ -3331,7 +4295,7 @@
                 line.style.left = (rightX + panelWidth / 2) + 'px';
                 line.style.height = verticalGap + 'px';
                 overlay.appendChild(line);
-                
+
                 window.connectionLinesData.push({
                     element: line,
                     type: 'vertical',
@@ -3340,7 +4304,7 @@
                     baseY: (i + 1) * (panelHeight + verticalGap) - verticalGap
                 });
             }
-            
+
             // Horizontal lines - connect left to right at each row
             for (let i = 0; i < 5; i++) {
                 const line = document.createElement('div');
@@ -3348,7 +4312,7 @@
                 line.style.left = (leftX + panelWidth) + 'px';
                 line.style.width = horizontalGap + 'px';
                 overlay.appendChild(line);
-                
+
                 window.connectionLinesData.push({
                     element: line,
                     type: 'horizontal',
@@ -3357,42 +4321,42 @@
                 });
             }
         }
-        
+
         // Update work panels positions based on gallery scroll
         function updateWorkPanelsScroll(scrollProgress) {
             if (!window.workPanelsData) return;
-            
+
             const panelHeight = 260;
             const verticalGap = 300;
             const totalHeight = 6 * (panelHeight + verticalGap); // Height of tallest column
             const viewportHeight = window.innerHeight;
-            
+
             // REVERSED: scrollProgress 0 = panels at top, scrollProgress 1 = panels scrolled up
             const scrollOffset = scrollProgress * (totalHeight + viewportHeight * 0.3);
             const startY = viewportHeight * 0.1; // Start position from top of viewport
-            
+
             window.workPanelsData.forEach((data, index) => {
                 const y = startY + data.baseY - scrollOffset;
                 data.element.style.top = y + 'px';
-                
+
                 // Fade out panels that are off screen
                 const opacity = (y > -260 && y < viewportHeight + 50) ? 1 : 0;
                 data.element.style.opacity = opacity;
             });
-            
+
             // Update connection lines positions
             if (window.connectionLinesData) {
                 window.connectionLinesData.forEach(data => {
                     const y = startY + data.baseY - scrollOffset;
                     data.element.style.top = y + 'px';
-                    
+
                     // Fade out lines that are off screen
                     const opacity = (y > -300 && y < viewportHeight + 50) ? 1 : 0;
                     data.element.style.opacity = opacity;
                 });
             }
         }
-        
+
         // Show/hide works panels overlay
         function showWorksPanels(show) {
             const overlay = document.getElementById('works-panels-overlay');
@@ -3418,7 +4382,7 @@
             const galleryGroup = new THREE.Group();
             galleryGroup.position.y = galleryY;
             worksSection.add(galleryGroup);
-            
+
             // Store gallery data for animation
             window.galleryData = {
                 group: galleryGroup,
@@ -3428,29 +4392,29 @@
                 circularLines: [],
                 cylinderRadius: 120 // Store for camera reference
             };
-            
+
             // ===== CYLINDRICAL CUBE WALLS =====
             // Taller cylinder to fill the view completely
             const cylinderRadius = 20;
             const cylinderHeight = 120; // Much taller - no empty space
             const cubeSize = 0.5;
-            
+
             // Calculate exact number of cubes needed for seamless wall
             const circumference = 2 * Math.PI * cylinderRadius;
             const cubesAroundCircumference = Math.ceil(circumference / cubeSize);
             const cubesVertical = Math.ceil(cylinderHeight / cubeSize);
             const totalCubes = cubesAroundCircumference * cubesVertical;
-            
+
             // Store cylinder info
             window.galleryData.cylinderRadius = cylinderRadius;
             window.galleryData.cylinderHeight = cylinderHeight;
             window.galleryData.cubeSize = cubeSize;
             window.galleryData.cubesAround = cubesAroundCircumference;
             window.galleryData.cubesVertical = cubesVertical;
-            
+
             // Create instanced mesh for cylinder walls
             const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-            
+
             // Material for instanced mesh - metallic reflective with transparency
             const cubeMaterial = new THREE.MeshStandardMaterial({
                 color: 0xffffff,
@@ -3460,11 +4424,11 @@
                 opacity: 0.7,
                 envMapIntensity: 1.0
             });
-            
+
             const cubeInstances = new THREE.InstancedMesh(cubeGeo, cubeMaterial, totalCubes);
             cubeInstances.castShadow = true;
             cubeInstances.receiveShadow = true;
-            
+
             // Add lights for the gallery - more lights at upper side
             const galleryLight1 = new THREE.PointLight(0xffffff, 3, 80);
             galleryLight1.position.set(0, 90, 0);
@@ -3472,60 +4436,60 @@
             galleryLight1.shadow.mapSize.width = 512;
             galleryLight1.shadow.mapSize.height = 512;
             galleryGroup.add(galleryLight1);
-            
+
             const galleryLight2 = new THREE.PointLight(0xffffff, 2.5, 70);
             galleryLight2.position.set(0, 70, 0);
             galleryGroup.add(galleryLight2);
-            
+
             const galleryLight3 = new THREE.PointLight(0xffffff, 2, 60);
             galleryLight3.position.set(0, 50, 0);
             galleryGroup.add(galleryLight3);
-            
+
             const galleryLight4 = new THREE.PointLight(0x440808, 1.5, 50);
             galleryLight4.position.set(0, 30, 0);
             galleryGroup.add(galleryLight4);
-            
+
             const galleryLight5 = new THREE.PointLight(0xffffff, 1.5, 50);
             galleryLight5.position.set(0, 100, 0);
             galleryGroup.add(galleryLight5);
-            
+
             // Ambient light for the gallery - brighter
             const galleryAmbient = new THREE.AmbientLight(0x333344, 0.8);
             galleryGroup.add(galleryAmbient);
-            
+
             // Store base positions for displacement
             const basePositions = [];
-            
+
             const dummy = new THREE.Object3D();
             const color = new THREE.Color();
             let instanceIndex = 0;
-            
+
             // Cubes with randomized sizes forming cylinder
             for (let v = 0; v < cubesVertical; v++) {
                 const y = v * cubeSize - 5;
-                
+
                 for (let h = 0; h < cubesAroundCircumference; h++) {
                     const angle = (h / cubesAroundCircumference) * Math.PI * 2;
-                    
+
                     // Final position on cylinder wall
                     const x = Math.cos(angle) * cylinderRadius;
                     const z = Math.sin(angle) * cylinderRadius;
-                    
+
                     // Random scale for each cube
                     const randomScale = 0.4 + Math.random() * 1.2; // 0.4 to 1.6
-                    
+
                     // Start position - far away from center, scattered
                     const startDistance = 150 + Math.random() * 100; // 150-250 units away
                     const startAngleOffset = (Math.random() - 0.5) * 1.5; // Random angle spread
                     const startY = y + (Math.random() - 0.5) * 200; // Scattered in Y
                     const startX = Math.cos(angle + startAngleOffset) * startDistance;
                     const startZ = Math.sin(angle + startAngleOffset) * startDistance;
-                    
+
                     // Random delay for staggered arrival (0 to 0.7)
                     const arrivalDelay = Math.random() * 0.7;
-                    
+
                     // Store base position with start position for animation
-                    basePositions.push({ 
+                    basePositions.push({
                         x, y, z, angle,
                         startX, startY, startZ,
                         arrivalDelay,
@@ -3535,23 +4499,23 @@
                         currentDisplacement: 0,
                         targetDisplacement: 0
                     });
-                    
+
                     // Start cubes at their far positions
                     dummy.position.set(startX, startY, startZ);
                     dummy.rotation.set(0, angle, 0);
                     dummy.scale.set(randomScale * 0.1, randomScale * 0.1, randomScale * 0.1); // Start tiny
-                    
+
                     dummy.updateMatrix();
                     cubeInstances.setMatrixAt(instanceIndex, dummy.matrix);
-                    
+
                     // Set initial color to dark
                     color.setRGB(0.0, 0.0, 0.0);
                     cubeInstances.setColorAt(instanceIndex, color);
-                    
+
                     instanceIndex++;
                 }
             }
-            
+
             cubeInstances.instanceMatrix.needsUpdate = true;
             cubeInstances.instanceColor.needsUpdate = true;
             galleryGroup.add(cubeInstances);
@@ -3559,12 +4523,12 @@
             window.galleryData.basePositions = basePositions;
             window.galleryData.dummy = new THREE.Object3D();
             window.galleryData.tempColor = new THREE.Color();
-            
+
             // Mouse speed tracking
             window.galleryData.lastMouseX = 0;
             window.galleryData.lastMouseY = 0;
             window.galleryData.mouseSpeed = 0;
-            
+
             // Create wireframe version for glow effect
             const wireGeo = new THREE.EdgesGeometry(cubeGeo);
             const wireMaterial = new THREE.LineBasicMaterial({
@@ -3573,7 +4537,7 @@
                 opacity: 0,
                 linewidth: 1
             });
-            
+
             // Create individual wireframe lines for each cube (stored for updating)
             const wireframes = [];
             for (let i = 0; i < basePositions.length; i++) {
@@ -3587,18 +4551,18 @@
                 wireframes.push(wire);
             }
             window.galleryData.wireframes = wireframes;
-            
+
             // ===== VERTICAL GLOWING LINES BEHIND WALLS =====
             const verticalLines = [];
             const numVerticalLines = 120; // Doubled - more lines for depth
             const lineRadius = cylinderRadius + 3; // Slightly behind the cube wall
             const lineHeight = cylinderHeight + 40; // Taller than cylinder
-            
+
             for (let i = 0; i < numVerticalLines; i++) {
                 const angle = (i / numVerticalLines) * Math.PI * 2;
                 const x = Math.cos(angle) * lineRadius;
                 const z = Math.sin(angle) * lineRadius;
-                
+
                 // Create vertical line
                 const lineGeo = new THREE.BufferGeometry();
                 const points = [
@@ -3606,73 +4570,73 @@
                     new THREE.Vector3(x, lineHeight, z)
                 ];
                 lineGeo.setFromPoints(points);
-                
+
                 const lineMat = new THREE.LineBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
                     opacity: 0.15 + Math.random() * 0.1 // Slight variation
                 });
-                
+
                 const line = new THREE.Line(lineGeo, lineMat);
                 galleryGroup.add(line);
                 verticalLines.push(line);
             }
             window.galleryData.verticalLines = verticalLines;
-            
+
             // Floor cubes removed
             // Circular lines removed
-            
+
             // Work planes are now handled by HTML overlay (works-panels-overlay)
             // Initialize empty workPlanes array for compatibility
             window.galleryData.workPlanes = [];
             window.galleryData.connectionLines = [];
-            
+
             // Store hover state
             window.galleryData.hoveredWork = null;
             window.galleryData.hoverTransition = 0;
-            
+
             // Particles removed
         }
-        
+
         function smoothstep(e0, e1, x) {
             const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
             return t * t * (3 - 2 * t);
         }
-        
+
         function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
         function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
-        
+
         function animate() {
             requestAnimationFrame(animate);
             time += 0.016;
-            
+
             // Update totem scene
             if (totemVisible) {
                 updateTotem(time);
             }
-            
+
             // Smooth lerp towards target scroll position
             smoothScrollProgress += (scrollProgress - smoothScrollProgress) * 0.06;
-            
+
             // Update scan waves and their glow rings
             let maxActiveRadius = 0;
             const activeRadii = new Float32Array(10);
             let activeCount = 0;
-            
+
             for (let i = scanWaves.length - 1; i >= 0; i--) {
                 const wave = scanWaves[i];
                 wave.radius += wave.speed * 0.016;
-                
+
                 // Calculate opacity based on progress (fade out as it expands)
                 const progress = wave.radius / wave.maxRadius;
                 const opacity = 1.0 - progress;
-                
+
                 // Update glow ring
                 if (wave.ring) {
                     wave.ring.material.uniforms.radius.value = wave.radius;
                     wave.ring.material.uniforms.opacity.value = opacity;
                 }
-                
+
                 if (wave.radius > wave.maxRadius) {
                     // Remove ring from scene
                     if (wave.ring) {
@@ -3689,32 +4653,32 @@
                     }
                 }
             }
-            
+
             // Track maximum reveal radius (keeps growing, doesn't shrink)
             revealProgress = Math.max(revealProgress, maxActiveRadius);
-            
+
             // Wireframe color tied to camera height - smooth transition
             // At top (scroll 0) = black, at bottom (scroll 1) = full color
             // Starts fading in at 20% scroll, full by 40%
             const targetReveal = smoothScrollProgress < 0.1 ? 0 : Math.min(1, (smoothScrollProgress - 0.1) / 0.15);
             wireframeReveal += (targetReveal - wireframeReveal) * 0.05;
-            
+
             // Camera movement: four phases
             // Phase 1 (0-25% scroll): Descent from top to ground
             // Phase 2 (25-50% scroll): Rotate around dome 270 degrees
             // Phase 3 (50-62.5% scroll): Camera holds, scene dissolves
             // Phase 4 (62.5-100% scroll): Camera descends into new episode
-            
+
             const descentEnd = 0.25;
             const rotationEnd = 0.50;
             const dissolveEnd = 0.625;
-            
+
             // Calculate scene dissolve progress (0 = fully visible, 1 = fully dissolved)
             let sceneDissolve = 0;
             if (smoothScrollProgress > rotationEnd) {
                 sceneDissolve = Math.min(1, (smoothScrollProgress - rotationEnd) / (dissolveEnd - rotationEnd));
             }
-            
+
             if (smoothScrollProgress <= descentEnd) {
                 // Phase 1: Descent
                 const t = easeInOutCubic(smoothScrollProgress / descentEnd);
@@ -3726,7 +4690,7 @@
                 // Phase 2: Rotation around dome
                 const rotationProgress = (smoothScrollProgress - descentEnd) / (rotationEnd - descentEnd);
                 const angle = rotationProgress * CONFIG.cameraRotation.totalAngle;
-                
+
                 // Start from z-positive (front), rotate clockwise
                 camera.position.x = Math.sin(angle) * CONFIG.cameraRotation.radius;
                 camera.position.y = CONFIG.cameraRotation.height;
@@ -3743,31 +4707,31 @@
                 // Phase 4: Scene fully dissolved, camera now descends
                 const newEpisodeProgress = (smoothScrollProgress - dissolveEnd) / (1 - dissolveEnd);
                 const t = easeInOutCubic(newEpisodeProgress);
-                
+
                 // Start from end of rotation position
                 const angle = CONFIG.cameraRotation.totalAngle;
                 const startX = Math.sin(angle) * CONFIG.cameraRotation.radius;
                 const startZ = Math.cos(angle) * CONFIG.cameraRotation.radius;
                 const startY = CONFIG.cameraRotation.height;
-                
+
                 // Descend towards center and down
                 const endX = 0;
                 const endZ = 0;
                 const endY = -200;
-                
+
                 camera.position.x = startX + (endX - startX) * t;
                 camera.position.y = startY + (endY - startY) * t;
                 camera.position.z = startZ + (endZ - startZ) * t;
-                
+
                 // Look downward as we descend
                 const lookY = CONFIG.camera.lookAt.y * (1 - t) + (camera.position.y - 50) * t;
                 camera.lookAt(0, lookY, 0);
             }
-            
+
             // Smooth mouse following
             smoothMousePos.x += (mousePos.x - smoothMousePos.x) * 0.03;
             smoothMousePos.y += (mousePos.y - smoothMousePos.y) * 0.03;
-            
+
             // 1. Subtle camera parallax - adds depth perception
             const parallaxStrength = 2.0;
             targetCameraOffset.x = smoothMousePos.x * parallaxStrength;
@@ -3776,7 +4740,7 @@
             currentCameraOffset.y += (targetCameraOffset.y - currentCameraOffset.y) * 0.02;
             camera.position.x += currentCameraOffset.x;
             camera.position.y += currentCameraOffset.y;
-            
+
             // 2. Dynamic sun direction - shadows shift subtly with mouse
             if (sunLight) {
                 const baseSunX = 50;
@@ -3785,10 +4749,10 @@
                 const sunShiftY = smoothMousePos.y * 5;
                 sunLight.position.x = baseSunX + sunShiftX;
                 sunLight.position.y = Math.max(5, baseSunY + sunShiftY);
-                
+
                 // Update LIGHT_DIR to match sun position
                 LIGHT_DIR.set(sunLight.position.x, sunLight.position.y, sunLight.position.z).normalize();
-                
+
                 // Update light direction in solid material shaders
                 if (domeSolid && domeSolid.material.uniforms) {
                     domeSolid.material.uniforms.lightDir.value.copy(LIGHT_DIR);
@@ -3800,17 +4764,17 @@
                     floorSolid.material.uniforms.lightDir.value.copy(LIGHT_DIR);
                 }
             }
-            
+
             // 3. Star field parallax - deeper layer moves slower
             if (starField) {
                 starField.rotation.y = smoothMousePos.x * 0.02;
                 starField.rotation.x = smoothMousePos.y * 0.01;
-                
+
                 // Stars fade in as camera descends - hidden at top, visible near ground
                 const starFade = smoothstep(0.15, 0.4, smoothScrollProgress);
                 starField.material.uniforms.starOpacity.value = starFade;
             }
-            
+
             // 4. Calculate mouse world position for glow effect
             // Project mouse into 3D space on a plane at y=0
             const raycaster = new THREE.Raycaster();
@@ -3819,23 +4783,23 @@
             const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
             raycaster.ray.intersectPlane(groundPlane, mouseWorldPos);
             if (!mouseWorldPos) mouseWorldPos = new THREE.Vector3(0, 0, 0);
-            
+
             // Update uniforms for wireframe shaders only
-            if (domeWireframe && domeWireframe.material.uniforms) { 
+            if (domeWireframe && domeWireframe.material.uniforms) {
                 domeWireframe.material.uniforms.scanRadii.value = activeRadii;
                 domeWireframe.material.uniforms.scanCount.value = activeCount;
                 domeWireframe.material.uniforms.revealRadius.value = revealProgress;
                 domeWireframe.material.uniforms.wireframeReveal.value = wireframeReveal;
                 domeWireframe.material.uniforms.mouseWorld.value.copy(mouseWorldPos);
                 domeWireframe.material.uniforms.time.value = time;
-                
+
                 // Fade out dome wireframe as logo appears
                 const fadeStart = 0.12;
                 const fadeEnd = 0.25;
                 const domeFadeOut = smoothstep(fadeStart, fadeEnd, smoothScrollProgress);
                 domeWireframe.material.uniforms.fadeOut.value = domeFadeOut;
             }
-            if (terrainWireframe) { 
+            if (terrainWireframe) {
                 terrainWireframe.material.uniforms.scanRadii.value = activeRadii;
                 terrainWireframe.material.uniforms.scanCount.value = activeCount;
                 terrainWireframe.material.uniforms.revealRadius.value = revealProgress;
@@ -3843,7 +4807,7 @@
                 terrainWireframe.material.uniforms.mouseWorld.value.copy(mouseWorldPos);
                 terrainWireframe.material.uniforms.time.value = time;
             }
-            if (floorWireframe) { 
+            if (floorWireframe) {
                 floorWireframe.material.uniforms.scanRadii.value = activeRadii;
                 floorWireframe.material.uniforms.scanCount.value = activeCount;
                 floorWireframe.material.uniforms.revealRadius.value = revealProgress;
@@ -3851,16 +4815,16 @@
                 floorWireframe.material.uniforms.mouseWorld.value.copy(mouseWorldPos);
                 floorWireframe.material.uniforms.time.value = time;
             }
-            
+
             // Animate HAGIA logo - appears when camera is close to landing
             if (hagiaLogo) {
                 // Start appearing at 15% scroll, fully visible by 25%
                 const logoAppearStart = 0.15;
                 const logoAppearEnd = 0.25;
                 const logoOpacity = smoothstep(logoAppearStart, logoAppearEnd, smoothScrollProgress);
-                
+
                 hagiaLogo.visible = logoOpacity > 0.01;
-                
+
                 // Dissolve dome solid mesh when logo starts appearing (keep wireframe)
                 if (domeSolid && domeSolid.material.uniforms) {
                     // Dissolve starts slightly before logo appears and completes as logo is fully visible
@@ -3869,27 +4833,27 @@
                     const dissolveProgress = smoothstep(dissolveStart, dissolveEnd, smoothScrollProgress);
                     domeSolid.material.uniforms.dissolveProgress.value = dissolveProgress;
                     domeSolid.material.uniforms.time.value = time;
-                    
+
                     // Only hide completely when fully dissolved
                     domeSolid.visible = dissolveProgress < 0.99;
                 }
-                
+
                 // Make logo rotate slightly as camera rotates (not always facing camera)
                 // This allows all parts to be seen better
                 const cameraPos2D = new THREE.Vector2(camera.position.x, camera.position.z);
                 const logoPos2D = new THREE.Vector2(hagiaLogo.position.x, hagiaLogo.position.z);
                 const angleToCamera = Math.atan2(cameraPos2D.x - logoPos2D.x, cameraPos2D.y - logoPos2D.y);
-                
+
                 // Add a slight offset rotation (logo rotates slower than camera)
                 // This creates a subtle rotation effect showing different angles
                 const rotationOffset = angleToCamera * 0.3; // Logo rotates at 30% of camera's angular movement
                 hagiaLogo.rotation.y = rotationOffset;
-                
+
                 // Logo stays on ground (no floating animation)
-                
+
                 // Scale in effect
                 hagiaLogo.scale.setScalar(0.7 + logoOpacity * 0.3);
-                
+
                 // Animate scanning wireframe during rotation phase (after descent)
                 const rotationStartLogo = 0.25;
                 const rotationEndLogo = 0.50;
@@ -3897,7 +4861,7 @@
                     const rotationProgressLogo = (smoothScrollProgress - rotationStartLogo) / (rotationEndLogo - rotationStartLogo);
                     // Scan effect fades in at start of rotation, stays active
                     const scanIntensity = smoothstep(0, 0.3, rotationProgressLogo);
-                    
+
                     for (let i = 0; i < hagiaLogoWireframe.length; i++) {
                         const wireframe = hagiaLogoWireframe[i];
                         if (wireframe.material.uniforms) {
@@ -3915,30 +4879,30 @@
                     }
                 }
             }
-            
+
             // Animate billboards - rise from ground during rotation phase
             const descentEndForBillboards = 0.25;
             const rotationEndForBillboards = 0.50;
             if (smoothScrollProgress > descentEndForBillboards && smoothScrollProgress <= rotationEndForBillboards) {
                 const billboardProgress = (smoothScrollProgress - descentEndForBillboards) / (rotationEndForBillboards - descentEndForBillboards);
                 const riseAmount = easeOutQuart(Math.min(1, billboardProgress * 2.0));
-                
+
                 for (let i = 0; i < billboards.length; i++) {
                     const bb = billboards[i];
                     const startY = -CONFIG.billboards.height;
                     const targetY = bb.targetY;
-                    
+
                     // Position - rise up
                     bb.group.position.y = startY + (targetY - startY) * riseAmount;
-                    
+
                     // Calculate reveal based on how much is above ground
                     const aboveGround = Math.max(0, bb.group.position.y) / targetY;
                     const revealAmount = Math.min(1, aboveGround * 1.5);
-                    
+
                     // Update shader uniforms
                     bb.fill.material.uniforms.revealAmount.value = revealAmount;
                     bb.border.material.uniforms.revealAmount.value = revealAmount;
-                    
+
                     // Make billboard face the camera
                     bb.group.lookAt(camera.position.x, bb.group.position.y, camera.position.z);
                 }
@@ -3951,70 +4915,70 @@
                     bb.border.material.uniforms.revealAmount.value = 0;
                 }
             }
-            
+
             // Scene dissolve effect - everything fades out after rotation
             // Camera moves up, tilts down toward dome, wireframe flickers back, then descends through dome
             const sceneRotationEnd = 0.50;
             const sceneDissolveEnd = 0.625;
-            
+
             if (smoothScrollProgress > sceneRotationEnd) {
                 const dissolveProgress = Math.min(1, (smoothScrollProgress - sceneRotationEnd) / (sceneDissolveEnd - sceneRotationEnd));
-                
+
                 // Camera path: rotation ends -> rise up high -> move to dome top -> look down into dome
                 const domeTopY = CONFIG.dome.radius + 2; // Just above dome top
                 const highPointY = CONFIG.cameraRotation.height + 25; // Rise up high first
-                
+
                 // Start position (end of rotation)
                 const startCamX = Math.sin(CONFIG.cameraRotation.totalAngle) * CONFIG.cameraRotation.radius;
                 const startCamZ = Math.cos(CONFIG.cameraRotation.totalAngle) * CONFIG.cameraRotation.radius;
                 const startCamY = CONFIG.cameraRotation.height;
-                
+
                 // Three phases:
                 // Phase 1 (0-40%): Rise up high, tilting toward dome
                 // Phase 2 (40-70%): Move toward dome center while staying high
                 // Phase 3 (70-100%): Descend to dome top, look straight down - SHOCKWAVES HERE
                 const phase1End = 0.4;
                 const phase2End = 0.7;
-                
+
                 let camX, camY, camZ;
-                
+
                 if (dissolveProgress < phase1End) {
                     // Phase 1: Rise up high
                     const phase1Progress = dissolveProgress / phase1End;
                     const easeProgress = smoothstep(0, 1, phase1Progress);
-                    
+
                     camX = startCamX;
                     camZ = startCamZ;
                     camY = startCamY + (highPointY - startCamY) * easeProgress;
-                    
+
                     camera.position.set(camX, camY, camZ);
                     camera.lookAt(0, CONFIG.dome.radius * 0.5, 0);
-                    
+
                 } else if (dissolveProgress < phase2End) {
                     // Phase 2: Move toward dome center while high
                     const phase2Progress = (dissolveProgress - phase1End) / (phase2End - phase1End);
                     const easeProgress = smoothstep(0, 1, phase2Progress);
-                    
+
                     camX = startCamX * (1 - easeProgress);
                     camZ = startCamZ * (1 - easeProgress);
                     camY = highPointY;
-                    
+
                     camera.position.set(camX, camY, camZ);
                     camera.lookAt(0, CONFIG.dome.radius * 0.3 * (1 - easeProgress), 0);
-                    
+
                 } else {
                     // Phase 3: Descend to dome top, looking straight down - SHOCKWAVES INTENSIFY
                     const phase3Progress = (dissolveProgress - phase2End) / (1 - phase2End);
                     const easeProgress = smoothstep(0, 1, phase3Progress);
-                    
+
                     camX = 0;
                     camZ = 0;
                     camY = highPointY + (domeTopY - highPointY) * easeProgress;
-                    
+
                     camera.position.set(camX, camY, camZ);
                     camera.lookAt(0, -5 * easeProgress, 0); // Look more down as we descend
                 }
-                
+
                 // DOME WIREFRAME - flickers back with shockwaves during dissolve
                 if (domeWireframe && domeWireframe.material.uniforms) {
                     // Multi-frequency flickering effect
@@ -4022,16 +4986,16 @@
                     const flicker2 = Math.sin(time * 27 + 1.5) * 0.5 + 0.5;
                     const flicker3 = Math.sin(time * 41 + 3.0) * 0.5 + 0.5;
                     const flickerIntensity = flicker1 * 0.4 + flicker2 * 0.35 + flicker3 * 0.25;
-                    
+
                     // Random glitch bursts
                     const glitchBurst = Math.random() > 0.92 ? 1.5 : 1.0;
-                    
+
                     // Wireframe fades in with flicker, synced with logo dissolve
                     const wireframeOpacity = dissolveProgress * flickerIntensity * glitchBurst;
                     domeWireframe.visible = true;
                     domeWireframe.material.uniforms.wireframeReveal.value = Math.min(1.0, wireframeOpacity);
                     domeWireframe.material.uniforms.flickerIntensity.value = flickerIntensity * glitchBurst;
-                    
+
                     // Shockwaves - ONLY in phase 3 when entering dome top
                     if (dissolveProgress > phase2End) {
                         const phase3Progress = (dissolveProgress - phase2End) / (1 - phase2End);
@@ -4043,15 +5007,15 @@
                         domeWireframe.material.uniforms.shockwaveActive.value = 0.0;
                         domeWireframe.material.uniforms.shockwaveTime.value = 0;
                     }
-                    
+
                     // Reset fadeOut during reappearance
                     domeWireframe.material.uniforms.fadeOut.value = 0;
                 }
-                
+
                 // LOGO - mesh dissolves with artistic dissolution
                 if (hagiaLogo) {
                     hagiaLogo.visible = dissolveProgress < 0.98;
-                    hagiaLogo.traverse(function(child) {
+                    hagiaLogo.traverse(function (child) {
                         if (child.isMesh && child.material) {
                             if (child.material.uniforms && child.material.uniforms.uTime) {
                                 child.material.uniforms.uTime.value = dissolveProgress;
@@ -4066,7 +5030,7 @@
                         }
                     });
                 }
-                
+
                 // Update logo wireframe dissolve
                 if (hagiaLogoWireframe) {
                     for (let i = 0; i < hagiaLogoWireframe.length; i++) {
@@ -4076,7 +5040,7 @@
                         }
                     }
                 }
-                
+
                 // TERRAIN - mesh dissolves
                 if (terrainSolid && terrainSolid.material.uniforms) {
                     terrainSolid.visible = dissolveProgress < 0.95;
@@ -4087,14 +5051,14 @@
                     terrainWireframe.visible = dissolveProgress < 0.7;
                     terrainWireframe.material.uniforms.dissolveProgress.value = dissolveProgress;
                 }
-                
+
                 // TERRAIN FRAGMENTS - 3D cubes flying away
                 if (window.terrainFragments && window.terrainFragments.material.uniforms) {
                     window.terrainFragments.visible = dissolveProgress > 0.05 && dissolveProgress < 0.98;
                     window.terrainFragments.material.uniforms.dissolveProgress.value = dissolveProgress;
                     window.terrainFragments.material.uniforms.time.value = time;
                 }
-                
+
                 // FLOOR - mesh dissolves
                 if (floorSolid && floorSolid.material.uniforms) {
                     floorSolid.visible = dissolveProgress < 0.95;
@@ -4105,7 +5069,7 @@
                     floorWireframe.visible = dissolveProgress < 0.7;
                     floorWireframe.material.uniforms.dissolveProgress.value = dissolveProgress;
                 }
-                
+
                 // BILLBOARDS - mesh dissolves with flickering fadeout
                 for (let i = 0; i < billboards.length; i++) {
                     const bb = billboards[i];
@@ -4119,19 +5083,19 @@
                         bb.border.material.uniforms.time.value = time;
                     }
                 }
-                
+
                 // Fade out stars during dissolve
                 if (starField && starField.material.uniforms) {
                     const starFadeIn = smoothstep(0.15, 0.4, smoothScrollProgress);
                     starField.material.uniforms.starOpacity.value = starFadeIn * (1 - dissolveProgress);
                     starField.visible = dissolveProgress < 0.99;
                 }
-                
+
                 // Fade out horizon glow
                 if (horizonGlow) {
                     horizonGlow.visible = dissolveProgress < 0.3;
                 }
-                
+
                 // Fade out haze planes
                 if (haze) {
                     haze.visible = dissolveProgress < 0.1;
@@ -4139,7 +5103,7 @@
                 if (haze2) {
                     haze2.visible = dissolveProgress < 0.1;
                 }
-                
+
                 // Fade out sun light
                 if (sunLight) {
                     sunLight.intensity = 1.5 * (1 - dissolveProgress);
@@ -4186,7 +5150,7 @@
                 }
                 // Reset logo
                 if (hagiaLogo) {
-                    hagiaLogo.traverse(function(child) {
+                    hagiaLogo.traverse(function (child) {
                         if (child.isMesh && child.material) {
                             child.material.opacity = 1.0;
                         }
@@ -4201,16 +5165,16 @@
                     domeWireframe.material.uniforms.flickerIntensity.value = 1.0;
                 }
             }
-            
+
             // ==================== GALLERY SECTION ====================
             // Camera descends to gallery after dissolve
             const galleryStart = 0.62;
-            
+
             // Track gallery auto-progress
             if (!window.galleryAutoProgress) window.galleryAutoProgress = 0;
             if (!window.galleryActive) window.galleryActive = false;
             if (!window.galleryLanded) window.galleryLanded = false;
-            
+
             // Allow scrolling back out of gallery
             if (smoothScrollProgress < galleryStart && window.galleryActive) {
                 // User scrolled back - exit gallery
@@ -4219,48 +5183,48 @@
                 window.galleryLanded = false;
                 window.galleryFormationStarted = false;
                 window.galleryFormationProgress = 0;
-                
+
                 // Hide totem when leaving gallery
                 const totemContainer = document.getElementById('totem-container');
                 if (totemContainer) {
                     totemContainer.classList.remove('visible');
                     totemVisible = false;
                 }
-                
+
                 // Hide work panels overlay
                 showWorksPanels(false);
             }
-            
+
             if (smoothScrollProgress > galleryStart && worksSection) {
                 worksSection.visible = true;
                 worksSectionActive = true;
-                
+
                 // Start automatic movement once we enter gallery
                 if (!window.galleryActive && smoothScrollProgress > galleryStart) {
                     window.galleryActive = true;
                     window.galleryAutoProgress = 0;
                     window.galleryScrollBase = smoothScrollProgress;
                     window.galleryFormationStarted = false; // Track formation animation
-                    
+
                     // Show totem when entering gallery/tunnel
                     const totemContainer = document.getElementById('totem-container');
                     if (totemContainer) {
                         totemContainer.classList.add('visible');
                         totemVisible = true;
                     }
-                    
+
                     // Show work panels overlay
                     showWorksPanels(true);
                 }
-                
+
                 // Auto-advance into gallery until landed
                 if (window.galleryActive && window.galleryAutoProgress < 1) {
                     window.galleryAutoProgress += 0.012; // Speed of automatic descent
                 }
-                
+
                 const galleryProgress = Math.min(1, window.galleryAutoProgress);
                 const easedGProgress = easeOutQuart(galleryProgress);
-                
+
                 // Mark when we've landed and start formation animation
                 if (easedGProgress > 0.95 && !window.galleryLanded) {
                     window.galleryLanded = true;
@@ -4268,18 +5232,18 @@
                     window.galleryFormationStarted = true;
                     window.galleryFormationProgress = 0; // Start formation from 0
                 }
-                
+
                 // Animate formation after landing
                 if (window.galleryFormationStarted && window.galleryFormationProgress < 1) {
                     window.galleryFormationProgress += 0.015; // Formation speed
                 }
-                
+
                 // Gallery dimensions - taller cylinder
                 const galleryY = -600;
                 const cylinderHeight = 120; // Match the taller cylinder
                 const galleryFloor = galleryY + 20; // Start higher in cylinder
                 const galleryCeiling = galleryY + cylinderHeight - 20; // End lower in cylinder
-                
+
                 // Calculate scroll-based vertical position in gallery
                 let scrollInGallery = 0;
                 if (window.galleryLanded) {
@@ -4287,7 +5251,7 @@
                     const remainingScroll = 1.0 - window.galleryScrollBase;
                     scrollInGallery = Math.max(0, Math.min(1, scrollSinceLanding / remainingScroll));
                 }
-                
+
                 // Camera Y position: REVERSED - start at ceiling, scroll down to floor
                 let camY;
                 if (!window.galleryLanded) {
@@ -4299,25 +5263,25 @@
                     // Scroll through gallery - from ceiling DOWN to floor
                     camY = galleryCeiling - scrollInGallery * (galleryCeiling - galleryFloor);
                 }
-                
+
                 // Camera stays fixed in center, only scroll changes height
                 if (window.galleryLanded) {
                     // Fixed camera position - only Y changes with scroll
                     camera.position.set(0, camY, 0);
                     // Look straight ahead at the wall - no up or down tilt
                     camera.lookAt(0, camY, -20);
-                    
+
                     // Update HTML work panels scroll position
                     updateWorkPanelsScroll(scrollInGallery);
                 } else {
                     // During descent - look at center of gallery
                     camera.position.set(0, camY, 0);
                     camera.lookAt(0, camY, -20);
-                    
+
                     // Reset work panels to initial position during descent
                     updateWorkPanelsScroll(0);
                 }
-                
+
                 // ===== REVEAL GALLERY ELEMENTS =====
                 if (window.galleryData) {
                     // JavaScript-based cube displacement with mouse
@@ -4327,78 +5291,78 @@
                         const dummy = window.galleryData.dummy;
                         const cRadius = window.galleryData.cylinderRadius;
                         const cylinderHeight = window.galleryData.cylinderHeight;
-                        
+
                         // Formation progress - starts after camera lands, uses dedicated progress variable
                         const formationProgress = window.galleryFormationProgress || 0;
                         const easedFormationGlobal = easeOutQuart(formationProgress);
-                        
+
                         // Simple direct mapping since camera is fixed at center
                         const angle = mousePos.x * Math.PI * 0.8;
                         const localCamY = camY - galleryY;
                         const heightRange = 20;
-                        
+
                         // Mouse target on cylinder wall
                         const mouseX = Math.sin(angle) * cRadius;
                         const mouseZ = -Math.cos(angle) * cRadius;
                         const mouseY = localCamY + mousePos.y * heightRange;
-                        
+
                         const mouseRadius = 8; // Larger radius
                         const displacementStrength = 5; // More aggressive displacement
                         const tempColor = window.galleryData.tempColor;
                         const wireframes = window.galleryData.wireframes;
-                        
+
                         // Update each cube instance
                         for (let i = 0; i < basePositions.length; i++) {
                             const base = basePositions[i];
-                            
+
                             // Calculate this cube's formation progress (staggered by arrivalDelay)
                             const cubeFormation = Math.max(0, Math.min(1, (easedFormationGlobal - base.arrivalDelay) / (1 - base.arrivalDelay)));
                             const easedFormation = cubeFormation * cubeFormation * (3 - 2 * cubeFormation); // smoothstep
-                            
+
                             // Interpolate from start position to final position
                             const currentX = base.startX + (base.x - base.startX) * easedFormation;
                             const currentY = base.startY + (base.y - base.startY) * easedFormation;
                             const currentZ = base.startZ + (base.z - base.startZ) * easedFormation;
-                            
+
                             // Scale grows as cube arrives
                             const currentScale = base.scale * (0.1 + 0.9 * easedFormation);
-                            
+
                             // Distance from mouse (only apply displacement after mostly formed)
                             let displacement = 0;
                             if (easedFormation > 0.8) {
                                 const dx = base.x - mouseX;
                                 const dy = base.y - mouseY;
                                 const dz = base.z - mouseZ;
-                                const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                                
+                                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
                                 if (dist < mouseRadius) {
                                     const factor = 1 - (dist / mouseRadius);
                                     displacement = factor * factor * displacementStrength * (easedFormation - 0.8) * 5;
                                 }
                             }
-                            
+
                             // Push inward from final position
                             const pushX = -base.x / cRadius * displacement;
                             const pushZ = -base.z / cRadius * displacement;
-                            
+
                             // Final position: interpolated position + displacement
                             const finalX = currentX + (easedFormation > 0.8 ? pushX : 0);
                             const finalZ = currentZ + (easedFormation > 0.8 ? pushZ : 0);
-                            
+
                             dummy.position.set(finalX, currentY, finalZ);
                             dummy.rotation.set(0, base.angle, 0);
                             dummy.scale.set(currentScale, currentScale, currentScale);
                             dummy.updateMatrix();
                             cubeWalls.setMatrixAt(i, dummy.matrix);
-                            
+
                             // Color: fade in as cube arrives + displacement glow
                             const ambientDim = 0.08 * easedFormation;
                             const brightness = displacement / displacementStrength;
                             const totalBrightness = Math.min(1, ambientDim + brightness);
-                            
+
                             tempColor.setRGB(totalBrightness, totalBrightness, totalBrightness + brightness * 0.1);
                             cubeWalls.setColorAt(i, tempColor);
-                            
+
                             // Update wireframe glow
                             if (wireframes && wireframes[i]) {
                                 const wire = wireframes[i];
@@ -4413,14 +5377,14 @@
                                 }
                             }
                         }
-                        
+
                         cubeWalls.instanceMatrix.needsUpdate = true;
                         cubeWalls.instanceColor.needsUpdate = true;
-                        
+
                         // Set material opacity for reveal
                         cubeWalls.material.opacity = easedGProgress * 0.7;
                     }
-                    
+
                     // Reveal vertical glowing lines
                     if (window.galleryData.verticalLines) {
                         const formProg = window.galleryFormationProgress || 0;
@@ -4431,12 +5395,12 @@
                         });
                     }
                 }
-                
+
                 // Gallery fog
                 scene.fog.density = 0.002;
-                
+
                 camera.updateMatrixWorld();
-                
+
             } else if (worksSection) {
                 worksSection.visible = false;
                 worksSectionActive = false;
@@ -4446,14 +5410,14 @@
                 window.galleryScrollBase = 0;
                 window.galleryFormationStarted = false;
                 window.galleryFormationProgress = 0;
-                
+
                 // Reset gallery elements
                 if (window.galleryData) {
                     // Reset cube walls
                     if (window.galleryData.cubeWalls && window.galleryData.cubeWalls.material.uniforms) {
                         window.galleryData.cubeWalls.material.uniforms.revealProgress.value = 0;
                     }
-                    
+
                     window.galleryData.workPlanes.forEach(wp => {
                         wp.plane.material.opacity = 0;
                         wp.border.material.opacity = 0;
@@ -4468,17 +5432,18 @@
                     }
                 }
             }
-            
+
             renderer.render(scene, camera);
         }
-        
+
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        
+
         window.addEventListener('load', init);
     </script>
 </body>
+
 </html>
