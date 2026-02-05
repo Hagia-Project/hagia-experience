@@ -1527,7 +1527,7 @@
                 totalAngle: 270 * Math.PI / 180 // 270 degrees in radians
             },
             billboards: {
-                count: 6,
+                count: 5,
                 radius: 70, // Bigger radius - further from dome
                 width: 14, // Landscape - wider
                 height: 8, // Landscape - shorter
@@ -1613,13 +1613,12 @@
             createSunLight();
             createWorksSection();
 
-            // Load 3D logos for billboards (index 0-5)
+            // Load 3D logos for billboards (index 0-4)
             addLogoToBillboard(0, 'logo_0.obj');
             addLogoToBillboard(1, 'logo_1.obj');
             addLogoToBillboard(2, 'logo_2.obj');
             addLogoToBillboard(3, 'logo_3.obj');
             addLogoToBillboard(4, 'logo_4.obj');
-            addLogoToBillboard(5, 'logo_5.fbx');
 
             // Initialize totem scene (separate layer for Hagia logo)
             initTotemScene();
