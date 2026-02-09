@@ -1444,6 +1444,7 @@
                 folder: 'videos/RESEARCH PAPER AYDNA V1.0',
                 videos: ['video1.mp4'],
                 descFile: null,
+                cover: 'covers/4.png',
                 description: 'Visual presentation of AYDNA research paper findings.'
             },
             {
@@ -4176,7 +4177,7 @@
 
                 // Create cover image overlay
                 var cover = document.createElement('img');
-                cover.src = 'covers/' + (index + 1) + '.png';
+                cover.src = work.cover || ('covers/' + (index + 1) + '.png');
                 cover.style.position = 'absolute';
                 cover.style.top = '0';
                 cover.style.left = '0';
