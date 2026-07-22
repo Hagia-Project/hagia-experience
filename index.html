@@ -404,11 +404,16 @@
             max-width: 900px;
         }
 
-        .work-video-container video {
+        .work-video-container video,
+        .work-video-container iframe {
             width: 100%;
-            height: auto;
             display: block;
             aspect-ratio: 16 / 9;
+            border: 0;
+        }
+
+        .work-video-container video {
+            height: auto;
             object-fit: contain;
             background: #000;
         }
@@ -1426,7 +1431,10 @@
                 id: 'starhub',
                 title: 'STARHUB',
                 folder: 'videos/STARHUB',
-                videos: ['video1.mp4', 'video2.mp4'],
+                videos: ['video2.mp4'],
+                youtubeVideos: ['lsGHjiTfZ2U'],
+                previewVideo: 'video2.mp4',
+                cover: 'covers/starhub.png',
                 descFile: null,
                 description: 'Digital experience design for StarHub telecommunications.'
             },
@@ -1779,13 +1787,32 @@
                 // Add cover image as poster
                 // videoFile is like 'video1.mp4', 'video2.mp4', etc.
                 var videoNum = videoFile.match(/video(\d+)/);
-                if (videoNum) {
-                    var coverPath = 'covers/' + videoNum[1] + '.png';
+                var coverPath = idx === 0 && work.cover
+                    ? work.cover
+                    : videoNum ? 'covers/' + videoNum[1] + '.png' : null;
+                if (coverPath) {
                     video.poster = coverPath;
                     console.log('Setting poster for', videoFile, ':', coverPath);
                 }
 
                 container.appendChild(video);
+                videosEl.appendChild(container);
+            });
+
+            // Add externally hosted project videos after the local videos.
+            (work.youtubeVideos || []).forEach(function (videoId) {
+                var container = document.createElement('div');
+                container.className = 'work-video-container';
+
+                var iframe = document.createElement('iframe');
+                iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId);
+                iframe.title = work.title + ' video';
+                iframe.loading = 'lazy';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+                iframe.allowFullscreen = true;
+
+                container.appendChild(iframe);
                 videosEl.appendChild(container);
             });
 
@@ -1916,6 +1943,11 @@
             videos.forEach(v => {
                 v.pause();
                 v.currentTime = 0;
+            });
+
+            // Reset embedded players so playback cannot continue behind the closed page.
+            detailPage.querySelectorAll('iframe').forEach(iframe => {
+                iframe.src = 'about:blank';
             });
 
             setTimeout(() => {
@@ -4279,7 +4311,7 @@
 
                 // Create video element
                 var video = document.createElement('video');
-                video.src = work.folder + '/video1.mp4';
+                video.src = work.folder + '/' + (work.previewVideo || 'video1.mp4');
                 video.loop = true;
                 video.muted = true;
                 video.playsInline = true;
@@ -4293,7 +4325,7 @@
 
                 // Create cover image overlay
                 var cover = document.createElement('img');
-                cover.src = 'covers/' + (index + 1) + '.png';
+                cover.src = work.cover || 'covers/' + (index + 1) + '.png';
                 cover.style.position = 'absolute';
                 cover.style.top = '0';
                 cover.style.left = '0';
