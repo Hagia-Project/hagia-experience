@@ -1366,6 +1366,7 @@
             {
                 id: 'ai-documentary',
                 title: 'AI DOCUMENTARY',
+                landingCover: 'covers/2.png',
                 folder: 'videos/AI DOCUMENTARY',
                 videos: ['video1.mp4'],
                 descFile: 'AI DOCUMENTARY.txt',
@@ -1374,6 +1375,7 @@
             {
                 id: 'castle-walls',
                 title: 'CASTLE WALLS',
+                landingCover: 'covers/4.png',
                 folder: 'videos/CASTLE WALLS',
                 videos: ['video1.mp4'],
                 descFile: 'CASTLE WALLS.txt',
@@ -1382,6 +1384,7 @@
             {
                 id: 'gemini',
                 title: 'GEMINI',
+                landingCover: 'covers/5.png',
                 folder: 'videos/GEMINI',
                 videos: ['video1.mp4', 'video2.mp4'],
                 descFile: 'GEMINI.txt',
@@ -1390,6 +1393,7 @@
             {
                 id: 'google-ai-billboard',
                 title: 'GOOGLE AI BILLBOARD',
+                landingCover: 'covers/3.png',
                 folder: 'videos/GOOGLE AI BILLBOARD',
                 videos: ['video1.mp4', 'video2.mp4'],
                 descFile: 'GOOGLE AI BILLBOARD.txt',
@@ -1398,6 +1402,7 @@
             {
                 id: 'google-doodles',
                 title: 'GOOGLE DOODLES',
+                landingCover: 'covers/3.png',
                 folder: 'videos/GOOGLE DODDLES',
                 videos: ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4'],
                 descFile: 'GOOGLE DODDLES.txt',
@@ -1406,6 +1411,7 @@
             {
                 id: 'google-think-apps',
                 title: 'GOOGLE THINK APPS',
+                landingCover: 'covers/3.png',
                 folder: 'videos/GOOGLE THINK APPS',
                 videos: ['video1.mp4', 'video2.mp4', 'video3.mp4'],
                 descFile: 'GOOGLE THINK APPS.txt',
@@ -1434,13 +1440,15 @@
                 videos: ['video2.mp4'],
                 youtubeVideos: ['lsGHjiTfZ2U'],
                 previewVideo: 'video2.mp4',
-                cover: 'covers/starhub.png',
+                landingCover: 'covers/starhub.png',
+                detailCover: 'covers/starhub.png',
                 descFile: null,
                 description: 'Digital experience design for StarHub telecommunications.'
             },
             {
                 id: 'vision-sakip-sabanci',
                 title: 'VISION of SAKIP SABANCI',
+                landingCover: 'covers/6.png',
                 folder: 'videos/VISION of SAKIP SABANCI',
                 videos: ['video1.mp4'],
                 descFile: 'VISION of SAKIP SABANCI.txt',
@@ -1787,8 +1795,8 @@
                 // Add cover image as poster
                 // videoFile is like 'video1.mp4', 'video2.mp4', etc.
                 var videoNum = videoFile.match(/video(\d+)/);
-                var coverPath = idx === 0 && work.cover
-                    ? work.cover
+                var coverPath = idx === 0 && work.detailCover
+                    ? work.detailCover
                     : videoNum ? 'covers/' + videoNum[1] + '.png' : null;
                 if (coverPath) {
                     video.poster = coverPath;
@@ -4325,7 +4333,7 @@
 
                 // Create cover image overlay
                 var cover = document.createElement('img');
-                cover.src = work.cover || 'covers/' + (index + 1) + '.png';
+                cover.src = work.landingCover || 'covers/' + (index + 1) + '.png';
                 cover.style.position = 'absolute';
                 cover.style.top = '0';
                 cover.style.left = '0';
